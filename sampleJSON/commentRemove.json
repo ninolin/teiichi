@@ -1,0 +1,35 @@
+{
+    "entry": [
+        {
+            "changes": [
+                {
+                    "field": "feed",
+                    "value": {
+                        "from": {
+                            "id": "274738379777206",
+                            "name": "Haloha dev"
+                        },
+                        "item": "comment",
+                        "comment_id": "274794353104942_275033136414397",
+                        "post_id": "274738379777206_274794353104942",
+                        "verb": "remove",
+                        "parent_id": "274738379777206_274794353104942",
+                        "created_time": 1532276677,
+                        "post": {
+                            "type": "status",
+                            "updated_time": "2018-07-22T10:48:04+0000",
+                            "promotion_status": "inactive",
+                            "permalink_url": "https://www.facebook.com/permalink.php?story_fbid=274794353104942&id=274738379777206",
+                            "id": "274738379777206_274794353104942",
+                            "status_type": "mobile_status_update",
+                            "is_published": true
+                        }
+                    }
+                }
+            ],
+            "id": "274738379777206",
+            "time": 1532276679
+        }
+    ],
+    "object": "page"
+}

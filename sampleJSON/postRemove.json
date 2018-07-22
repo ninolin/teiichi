@@ -1,0 +1,25 @@
+{
+    "entry": [
+        {
+            "changes": [
+                {
+                    "field": "feed",
+                    "value": {
+                        "recipient_id": "274738379777206",
+                        "from": {
+                            "id": "274738379777206",
+                            "name": "Haloha dev"
+                        },
+                        "item": "post",
+                        "post_id": "274738379777206_274794353104942",
+                        "verb": "remove",
+                        "created_time": 1532276970
+                    }
+                }
+            ],
+            "id": "274738379777206",
+            "time": 1532276971
+        }
+    ],
+    "object": "page"
+}
