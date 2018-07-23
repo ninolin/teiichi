@@ -13,14 +13,14 @@ try {
     if($f_object === "page"){
         $f_receive_time = $json_obj->entry[0]->time;
         fwrite($myfile, "\xEF\xBB\xBF f_receive_time:".$f_receive_time); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-        $f_page_id = $json_obj->entry[0]->change[0]->value->from->id;
+        $f_page_id = $json_obj->entry[0]->changes[0]->value->from->id;
         fwrite($myfile, "\xEF\xBB\xBF page_id:".$f_page_id); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-        $f_page_name = $json_obj->entry[0]->change[0]->value->from->name;
-        $f_post_id = $json_obj->entry[0]->change[0]->value->post_id;
-        $f_verb = $json_obj->entry[0]->change[0]->value->verb;
-        $f_created_time = $json_obj->entry[0]->change[0]->value->created_time;
-        $f_message = $json_obj->entry[0]->change[0]->value->message;
-        $f_parent_id = $json_obj->entry[0]->change[0]->value->parent_id;
+        $f_page_name = $json_obj->entry[0]->changes[0]->value->from->name;
+        $f_post_id = $json_obj->entry[0]->changes[0]->value->post_id;
+        $f_verb = $json_obj->entry[0]->changes[0]->value->verb;
+        $f_created_time = $json_obj->entry[0]->changes[0]->value->created_time;
+        $f_message = $json_obj->entry[0]->changes[0]->value->message;
+        $f_parent_id = $json_obj->entry[0]->changes[0]->value->parent_id;
         $sql = "SELECT * FROM fb_page WHERE page_id ='".$f_page_id ."'";
         $result = sql_select_fetchALL($sql);
         if($result->num_rows == 0){
