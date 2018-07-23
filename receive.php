@@ -35,7 +35,7 @@ if($f_object === "page"){
 
 function sql_select_fetchALL($sql){   
     $db_server = "localhost";
-    $db_name = "course_management_t";
+    $db_name = "teiichi";
     $db_user = "root";
     $db_passwd = "fdd396906f5054060122311cf8b0eb2da0cfe7a437501152";
     
