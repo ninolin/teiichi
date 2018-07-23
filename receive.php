@@ -8,30 +8,35 @@ $json_obj = json_decode($json_str); //轉成json格式
 $myfile = fopen("log.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 fwrite($myfile, "\xEF\xBB\xBF".$json_str); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 
-$f_object = $json_obj->object;
-if($f_object === "page"){
-    $f_receive_time = $json_obj->entry[0]->time;
-    $f_page_id = $json_obj->entry[0]->change[0]->value->from->id;
-    $f_page_name = $json_obj->entry[0]->change[0]->value->from->name;
-    $f_post_id = $json_obj->entry[0]->change[0]->value->post_id;
-    $f_verb = $json_obj->entry[0]->change[0]->value->verb;
-    $f_created_time = $json_obj->entry[0]->change[0]->value->created_time;
-    $f_message = $json_obj->entry[0]->change[0]->value->message;
-    $f_parent_id = $json_obj->entry[0]->change[0]->value->parent_id;
-    $sql = "SELECT * FROM fb_page WHERE page_id ='".$f_page_id ."'";
-    $result = sql_select_fetchALL($sql);
-    if($result->num_rows == 0){
-        $sql = "INSERT INTO fb_page (page_id, page_name) VALUES ('".$f_page_id."', '".$f_page_name."')";
-        sql_select_fetchALL($sql);
-    }
-
-    if($f_verb == 'add'){
-        $sql = "INSERT INTO fb_post (page_id, post_id, post_verb, post_created_time, post_message) 
-                VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."')";
+try {
+    $f_object = $json_obj->object;
+    if($f_object === "page"){
+        $f_receive_time = $json_obj->entry[0]->time;
+        $f_page_id = $json_obj->entry[0]->change[0]->value->from->id;
+        $f_page_name = $json_obj->entry[0]->change[0]->value->from->name;
+        $f_post_id = $json_obj->entry[0]->change[0]->value->post_id;
+        $f_verb = $json_obj->entry[0]->change[0]->value->verb;
+        $f_created_time = $json_obj->entry[0]->change[0]->value->created_time;
+        $f_message = $json_obj->entry[0]->change[0]->value->message;
+        $f_parent_id = $json_obj->entry[0]->change[0]->value->parent_id;
+        $sql = "SELECT * FROM fb_page WHERE page_id ='".$f_page_id ."'";
         $result = sql_select_fetchALL($sql);
+        if($result->num_rows == 0){
+            $sql = "INSERT INTO fb_page (page_id, page_name) VALUES ('".$f_page_id."', '".$f_page_name."')";
+            sql_select_fetchALL($sql);
+        }
+
+        if($f_verb == 'add'){
+            $sql = "INSERT INTO fb_post (page_id, post_id, post_verb, post_created_time, post_message) 
+                    VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."')";
+            $result = sql_select_fetchALL($sql);
+        }
+        
     }
-    
+} catch(Exception $e) {
+    fwrite($myfile, 'Caught exception: ',  $e->getMessage(), "\n"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 }
+
 
 function sql_select_fetchALL($sql){   
     $db_server = "localhost";
