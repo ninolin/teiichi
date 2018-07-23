@@ -12,29 +12,37 @@ try {
     $f_object = $json_obj->object;
     if($f_object === "page"){
         $f_receive_time = $json_obj->entry[0]->time;
-        fwrite($myfile, "\xEF\xBB\xBF f_receive_time:".$f_receive_time); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
         $f_page_id = $json_obj->entry[0]->changes[0]->value->from->id;
-        fwrite($myfile, "\xEF\xBB\xBF page_id:".$f_page_id); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
         $f_page_name = $json_obj->entry[0]->changes[0]->value->from->name;
         $f_post_id = $json_obj->entry[0]->changes[0]->value->post_id;
         $f_verb = $json_obj->entry[0]->changes[0]->value->verb;
         $f_created_time = $json_obj->entry[0]->changes[0]->value->created_time;
         $f_message = $json_obj->entry[0]->changes[0]->value->message;
         $f_parent_id = $json_obj->entry[0]->changes[0]->value->parent_id;
+        //檢查fb_page是否有紀錄
         $sql = "SELECT * FROM fb_page WHERE page_id ='".$f_page_id ."'";
         $result = sql_select_fetchALL($sql);
         if($result->num_rows == 0){
             $sql = "INSERT INTO fb_page (page_id, page_name) VALUES ('".$f_page_id."', '".$f_page_name."')";
-            fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
             sql_select_fetchALL($sql);
         }
-
-        if($f_verb == 'add'){
-            $sql = "INSERT INTO fb_post (page_id, post_id, post_verb, post_created_time, post_message) 
-                    VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."')";
-            $result = sql_select_fetchALL($sql);
+        if($f_parent_id == ""){
+            //新增/修改/刪除貼文
+            if($f_verb == 'add'){
+                $post_url = "https://www.facebook.com/permalink.php?story_fbid=".$f_post_id."&id=".$f_page_id;
+                $sql = "INSERT INTO fb_post (page_id, post_id, post_verb, post_created_time, post_message, post_url) 
+                        VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."', '".$post_url."')";
+                $result = sql_select_fetchALL($sql);
+            } else if($f_verb == 'edited') {
+                $sql = "UPDATE fb_post SET post_message = '".$f_message."'";
+                $result = sql_select_fetchALL($sql);
+            } else if($f_verb == 'edited') {
+                $sql = "UPDATE fb_post SET post_status = '2'";
+                $result = sql_select_fetchALL($sql);
+            }
+        } else {
+            
         }
-        
     }
 } catch(Exception $e) {
     fwrite($myfile, 'Caught exception: ',  $e->getMessage(), "\n"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
