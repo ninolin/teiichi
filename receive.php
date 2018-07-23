@@ -23,6 +23,7 @@ try {
         $result = sql_select_fetchALL($sql);
         if($result->num_rows == 0){
             $sql = "INSERT INTO fb_page (page_id, page_name) VALUES ('".$f_page_id."', '".$f_page_name."')";
+            fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
             sql_select_fetchALL($sql);
         }
 
