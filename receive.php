@@ -88,11 +88,11 @@ function send_message($f_page_id, $send_message){
             "messages" => array (
                 array (
                     "type" => "text",
-                    "text" => $send_message
+                    "text" => $page_name."有新貼文囉!!"
                 ),
                 array (
                     "type" => "text",
-                    "text" => $page_name."有新貼文囉!!"
+                    "text" => $send_message
                 )
             )
         );

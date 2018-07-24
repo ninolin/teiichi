@@ -46,7 +46,7 @@
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		sing($sender_userid)
+			      		sign($sender_userid)
 			    	)
 			);
 		} else if($sender_txt == "mission"){
@@ -138,15 +138,22 @@
 		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
 		$result = sql_select_fetchALL($sql);
 		if($result->num_rows == 0){
-			//todo: 尋問是否要進行註冊
 			$json_str = '{
 				"type": "template",
-				"altText": "this is a carousel template",
+				"altText": "this is a buttons template",
 				"template": {
-				  "type": "confirm",
-				  "text": "請先註冊並待審核後即可進行簽到"
+				  "type": "buttons",
+				  "actions": [
+					{
+					  "type": "uri",
+					  "label": "註冊",
+					  "uri" => "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html"
+					}
+				  ],
+				  "title": "歡迎使用本服務",
+				  "text": "請註冊並審核後即可進行服務"
 				}
-		  	}';
+			}';
 			$json = json_decode($json_str);
 			return $json;
 		} else {
@@ -162,12 +169,50 @@
 				$json = json_decode($json_str);
 				return $json;
 			} else if($status == "active") {
-				//todo: 簽到
-			} else {
-				//todo: 註冊資料不通過
 				$json_str = '{
-					"type": "text",
-					"text": "註冊審核中"
+					"type": "template",
+					"altText": "this is a buttons template",
+					"template": {
+					  "type": "buttons",
+					  "actions": [
+						{
+						  "type": "message",
+						  "label": "進行簽到",
+						  "text": "action_sign"
+						},
+						{
+						  "type": "message",
+						  "label": "查看成就",
+						  "text": "action_achievement"
+						},
+						{
+						  "type": "message",
+						  "label": "編輯資料",
+						  "text": "action_editdata"
+						}
+					  ],
+					  "title": "每日簽到",
+					  "text": "文字"
+					}
+				}';
+				$json = json_decode($json_str);
+				return $json;
+			} else {
+				$json_str = '{
+					"type": "template",
+					"altText": "this is a buttons template",
+					"template": {
+					  "type": "buttons",
+					  "actions": [
+						{
+						  "type": "uri",
+						  "label": "註冊",
+						  "uri" => "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html"
+						}
+					  ],
+					  "title": "歡迎使用本服務",
+					  "text": "前次註冊審核失敗，若仍要使用本服務請重新註冊"
+					}
 				}';
 				$json = json_decode($json_str);
 				return $json;
