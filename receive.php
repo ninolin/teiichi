@@ -89,6 +89,9 @@ function send_message($f_page_id, $send_message){
             )
         );
 
+        $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+        fwrite($myfile, "\xEF\xBB\xBF".$response); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+
         $header[] = "Content-Type: application/json";
         //輸入line 的 Channel access token
         $header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
