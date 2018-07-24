@@ -72,11 +72,15 @@ try {
 }
 
 function send_message($f_page_id, $send_message){
-    $sql = "SELECT line_id FROM fb_page_subscribe WHERE page_id = '".$f_page_id."'";
+    $sql = "SELECT fp.page_name, fps.line_id 
+            FROM fb_page_subscribe fps, fb_page fp 
+            WHERE fps.page_id = '".$f_page_id."' AND fp.page_id = fps.page_id";
     $result = sql_select_fetchALL($sql);
     if($result->num_rows > 0) {
+        $page_name;
         $user_list = array();
         foreach($result as $a){
+            $page_name = $a['page_name'];
             array_push($user_list,  $a['line_id']);
         }
         $response = array (
@@ -88,7 +92,7 @@ function send_message($f_page_id, $send_message){
                 ),
                 array (
                     "type" => "text",
-                    "text" => "安安你好"
+                    "text" => $page_name."有新貼文囉!!"
                 )
             )
         );
