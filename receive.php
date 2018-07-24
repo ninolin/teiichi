@@ -34,7 +34,7 @@ try {
                 $sql = "INSERT INTO fb_post (page_id, post_id, post_created_time, post_message, post_url) 
                         VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_created_time."', '".$f_message."', '".$post_url."')";
                 $result = sql_select_fetchALL($sql);
-                send_message($post_url);
+                send_message($f_page_id, $post_url);
             } else if($f_verb == 'edited') {
                 $sql = "UPDATE fb_post SET post_message = '".$f_message."', lastest_update_time = UNIX_TIMESTAMP() WHERE post_id = '".$f_post_id."'";
                 $result = sql_select_fetchALL($sql);
@@ -71,27 +71,36 @@ try {
     fwrite($myfile, 'Caught exception: ',  $e->getMessage(), "\n"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 }
 
-function send_message($send_message){
-    $response = array (
-        "to" => "U8d41dfb18097f57080858e39b929ce39",
-        "messages" => array (
-            array (
-                "type" => "text",
-                "text" => $send_message
+function send_message($f_page_id, $send_message){
+    $sql = "SELECT line_id FROM fb_page_subscribe WHERE page_id = '".$f_page_id."'";
+    $result = sql_select_fetchALL($sql);
+    if($result->num_rows > 0) {
+        $user_list = array();
+        foreach($result as $a){
+            array_push($user_list,  $a['line_id']);
+        }
+        $response = array (
+            "to" => $user_list,
+            "messages" => array (
+                array (
+                    "type" => "text",
+                    "text" => $send_message
+                )
             )
-        )
-    );
+        );
 
-    $header[] = "Content-Type: application/json";
-	//輸入line 的 Channel access token
-	$header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
-	$ch = curl_init("https://api.line.me/v2/bot/message/push");
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $header);                                                                                                   
-	$result = curl_exec($ch);
-	curl_close($ch);
+        $header[] = "Content-Type: application/json";
+        //輸入line 的 Channel access token
+        $header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
+        $ch = curl_init("https://api.line.me/v2/bot/message/push");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);                                                                                                   
+        $result = curl_exec($ch);
+        curl_close($ch);
+    }
+    
 }
 
 function sql_select_fetchALL($sql){   
