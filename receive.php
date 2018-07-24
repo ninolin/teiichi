@@ -85,6 +85,10 @@ function send_message($f_page_id, $send_message){
                 array (
                     "type" => "text",
                     "text" => $send_message
+                ),
+                array (
+                    "type" => "text",
+                    "text" => "安安你好"
                 )
             )
         );
