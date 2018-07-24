@@ -31,9 +31,10 @@ try {
             //新增/修改/刪除貼文
             if($f_verb == 'add'){
                 $post_url = "https://www.facebook.com/permalink.php?story_fbid=".explode('_',$f_post_id)[1]."&id=".$f_page_id;
-                $sql = "INSERT INTO fb_post (page_id, post_id, post_verb, post_created_time, post_message, post_url) 
-                        VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."', '".$post_url."')";
+                $sql = "INSERT INTO fb_post (page_id, post_id, post_created_time, post_message, post_url) 
+                        VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_created_time."', '".$f_message."', '".$post_url."')";
                 $result = sql_select_fetchALL($sql);
+                send_message($post_url);
             } else if($f_verb == 'edited') {
                 $sql = "UPDATE fb_post SET post_message = '".$f_message."', lastest_update_time = UNIX_TIMESTAMP() WHERE post_id = '".$f_post_id."'";
                 $result = sql_select_fetchALL($sql);
@@ -53,8 +54,8 @@ try {
                     foreach($result as $a){
                         $parent_comment_id = $a['parent_comment_id'];
                     }
-                    $sql = "INSERT INTO fb_comment (page_id, post_id, comment_id, parent_comment_id, comment_verb, comment_created_time, comment_message) 
-                        VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_comment_id."', '".$parent_comment_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."')";
+                    $sql = "INSERT INTO fb_comment (page_id, post_id, comment_id, parent_comment_id, comment_created_time, comment_message) 
+                        VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_comment_id."', '".$parent_comment_id."', '".$f_created_time."', '".$f_message."')";
                     $result = sql_select_fetchALL($sql);
                 }
             } else if($f_verb == 'edited') {
@@ -70,6 +71,28 @@ try {
     fwrite($myfile, 'Caught exception: ',  $e->getMessage(), "\n"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 }
 
+function send_message($send_message){
+    $response = array (
+        "to" => "U8d41dfb18097f57080858e39b929ce39",
+        "messages" => array (
+            array (
+                "type" => "text",
+                "text" => $send_message
+            )
+        )
+    );
+
+    $header[] = "Content-Type: application/json";
+	//輸入line 的 Channel access token
+	$header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
+	$ch = curl_init("https://api.line.me/v2/bot/message/push");
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $header);                                                                                                   
+	$result = curl_exec($ch);
+	curl_close($ch);
+}
 
 function sql_select_fetchALL($sql){   
     $db_server = "localhost";
