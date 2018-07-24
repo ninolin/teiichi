@@ -80,7 +80,7 @@ function send_message($f_page_id, $send_message){
             array_push($user_list,  $a['line_id']);
         }
         $response = array (
-            "to" => $user_list,
+            "to" => json_encode($user_list,false),
             "messages" => array (
                 array (
                     "type" => "text",
