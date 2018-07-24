@@ -90,7 +90,7 @@ function send_message($f_page_id, $send_message){
         );
 
         $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-        fwrite($myfile, "\xEF\xBB\xBF".$response); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+        fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 
         $header[] = "Content-Type: application/json";
         //輸入line 的 Channel access token
