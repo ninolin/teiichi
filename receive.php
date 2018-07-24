@@ -30,7 +30,7 @@ try {
         if($f_comment_id == ""){
             //新增/修改/刪除貼文
             if($f_verb == 'add'){
-                $post_url = "https://www.facebook.com/permalink.php?story_fbid=".$f_post_id."&id=".$f_page_id;
+                $post_url = "https://www.facebook.com/permalink.php?story_fbid=".explode($f_post_id,'_')[0]."&id=".$f_page_id;
                 $sql = "INSERT INTO fb_post (page_id, post_id, post_verb, post_created_time, post_message, post_url) 
                         VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."', '".$post_url."')";
                 $result = sql_select_fetchALL($sql);

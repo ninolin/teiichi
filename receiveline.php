@@ -77,31 +77,6 @@
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $header);                                                                                                   
 	$result = curl_exec($ch);
 	curl_close($ch);
-  
-	function welcome(){
-		$json = '{
-		  "type": "template",
-		  "altText": "this is a buttons template",
-		  "template": {
-			"type": "buttons",
-			"actions": [
-			  {
-				"type": "postback",
-				"label": "報名課程",
-				"data": "applyCourse"
-			  },
-			  {
-				"type": "postback",
-				"label": "我的課程",
-				"data": "myCourse"
-			  }
-			],
-			"title": "歡迎來到龍鳳行銷",
-			"text": "您可以報名新課程或查看已報名的課程"
-		  }
-		}';
-		return json_decode($json);
-	}
 	
 	function apply($sender_userid){
 		$json_str = '{
