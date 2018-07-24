@@ -19,6 +19,7 @@ try {
         $f_created_time = $json_obj->entry[0]->changes[0]->value->created_time;
         $f_message = $json_obj->entry[0]->changes[0]->value->message;
         $f_parent_id = $json_obj->entry[0]->changes[0]->value->parent_id;
+        $f_comment_id = $json_obj->entry[0]->changes[0]->value->comment_id;
         //檢查fb_page是否有紀錄
         $sql = "SELECT * FROM fb_page WHERE page_id ='".$f_page_id ."'";
         $result = sql_select_fetchALL($sql);
@@ -26,7 +27,7 @@ try {
             $sql = "INSERT INTO fb_page (page_id, page_name) VALUES ('".$f_page_id."', '".$f_page_name."')";
             sql_select_fetchALL($sql);
         }
-        if($f_parent_id == ""){
+        if($f_comment_id == ""){
             //新增/修改/刪除貼文
             if($f_verb == 'add'){
                 $post_url = "https://www.facebook.com/permalink.php?story_fbid=".$f_post_id."&id=".$f_page_id;
@@ -34,14 +35,35 @@ try {
                         VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."', '".$post_url."')";
                 $result = sql_select_fetchALL($sql);
             } else if($f_verb == 'edited') {
-                $sql = "UPDATE fb_post SET post_message = '".$f_message."'";
+                $sql = "UPDATE fb_post SET post_message = '".$f_message."', lastest_update_time = UNIX_TIMESTAMP() WHERE post_id = '".$f_post_id."'";
                 $result = sql_select_fetchALL($sql);
-            } else if($f_verb == 'edited') {
-                $sql = "UPDATE fb_post SET post_status = '2'";
+            } else if($f_verb == 'remove') {
+                $sql = "UPDATE fb_post SET post_status = '2', lastest_update_time = UNIX_TIMESTAMP() WHERE post_id = '".$f_post_id."'";
                 $result = sql_select_fetchALL($sql);
             }
         } else {
-            
+            //新增/修改/刪除留言
+            if($f_verb == 'add'){
+                $sql = "SELECT '0' as 'parent_comment_id' FROM `fb_post` WHERE post_id = '".$f_parent_id."'
+                        UNION 
+                        SELECT comment_id as 'parent_comment_id' FROM `fb_comment` WHERE comment_id = '".$f_parent_id."'";
+                $result = sql_select_fetchALL($sql);
+                if($result->num_rows > 0){
+                    $parent_comment_id = "";
+                    foreach($result as $a){
+                        $parent_comment_id = $a['parent_comment_id'];
+                    }
+                    $sql = "INSERT INTO fb_comment (page_id, post_id, comment_id, parent_comment_id, comment_verb, comment_created_time, comment_message) 
+                        VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_comment_id."', '".$parent_comment_id."', '".$f_verb."', '".$f_created_time."', '".$f_message."')";
+                    $result = sql_select_fetchALL($sql);
+                }
+            } else if($f_verb == 'edited') {
+                $sql = "UPDATE fb_comment SET comment_message = '".$f_message."', lastest_update_time = UNIX_TIMESTAMP() WHERE comment_id = '".$f_comment_id."'";
+                $result = sql_select_fetchALL($sql);
+            } else if($f_verb == 'remove') {
+                $sql = "UPDATE fb_comment SET comment_status = '2', lastest_update_time = UNIX_TIMESTAMP() WHERE comment_id = '".$f_comment_id."'";
+                $result = sql_select_fetchALL($sql);
+            }
         }
     }
 } catch(Exception $e) {
