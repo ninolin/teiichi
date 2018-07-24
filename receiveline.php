@@ -1,0 +1,333 @@
+<?php
+	$json_str = file_get_contents('php://input'); //接收request的body
+	$json_obj = json_decode($json_str); //轉成json格式
+	
+	$myfile = fopen("log.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+	fwrite($myfile, "\xEF\xBB\xBF".$json_str); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+	
+	$sender_userid = $json_obj->events[0]->source->userId; //取得訊息發送者的id
+	$sender_txt = $json_obj->events[0]->message->text; //取得訊息內容
+	$sender_replyToken = $json_obj->events[0]->replyToken; //取得訊息的replyToken
+	$sender_type = $json_obj->events[0]->type; //取得訊息的type
+	
+	if($sender_type == "postback"){ //訊息的type為postback(選單)
+		$postback_data = $json_obj->events[0]->postback->data; //取得postback的data
+		if(explode("&",$postback_data)[0] == "introCourse"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		introCourse(explode("&",$postback_data)[1])
+			    	)
+			); 
+		} else if(explode("&",$postback_data)[0] == "leaveCourse"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		leaveCourse(explode("&",$postback_data)[1], $sender_userid)
+			    	)
+			);
+		} else if(explode("&",$postback_data)[0] == "leaveCourseDate"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		leaveCourseDate(explode("&",$postback_data)[1], $sender_userid)
+			    	)
+			);
+		} else if(explode("&",$postback_data)[0] == "outCourse"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		outCourse(explode("&",$postback_data)[1], $sender_userid)
+			    	)
+			);
+		}
+	} else if($sender_type == "message"){
+		if($sender_txt == "sign"){
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		sing($sender_userid)
+			    	)
+			);
+		} else if($sender_txt == "mission"){
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		apply($sender_userid)
+			    	)
+			);
+		} else if($sender_txt == "operation"){
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		apply($sender_userid)
+			    	)
+			);
+		}
+		
+	}
+	fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+	$header[] = "Content-Type: application/json";
+	//輸入line 的 Channel access token
+	$header[] = "Authorization: Bearer ch4DaSxjxOTPaO7PR8pKHu67uotfCaPYuLK5zSw70ACvqemT77GTnzqr2b/7+jMIshCmLWf0U7bPLXsqreKz7tGzKkS6e51W8aM18nt+Jshj7DXtIUjvfUV2BZpQxM+NAXrBizCWLCDHc2/XCgrCGwdB04t89/1O/w1cDnyilFU=";
+	$ch = curl_init("https://api.line.me/v2/bot/message/reply");
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $header);                                                                                                   
+	$result = curl_exec($ch);
+	curl_close($ch);
+  
+	function welcome(){
+		$json = '{
+		  "type": "template",
+		  "altText": "this is a buttons template",
+		  "template": {
+			"type": "buttons",
+			"actions": [
+			  {
+				"type": "postback",
+				"label": "報名課程",
+				"data": "applyCourse"
+			  },
+			  {
+				"type": "postback",
+				"label": "我的課程",
+				"data": "myCourse"
+			  }
+			],
+			"title": "歡迎來到龍鳳行銷",
+			"text": "您可以報名新課程或查看已報名的課程"
+		  }
+		}';
+		return json_decode($json);
+	}
+	
+	function apply($sender_userid){
+		$json_str = '{
+  			"type": "template",
+  			"altText": "this is a carousel template",
+  			"template": {
+				"type": "carousel",
+				"columns": []
+  			}
+		}';
+		$json = json_decode($json_str);
+		$sql = "SELECT * 
+				FROM `course` 
+				WHERE course_startdate > CURDATE() and id not in 
+					(
+						SELECT course_id 
+						FROM course_student 
+						WHERE line_id = '".$sender_userid."'
+					)
+				";
+		$result = sql_select_fetchALL($sql);
+		$rcount = $result->num_rows;
+		$course_name = "";
+		$i = 0;
+		foreach($result as $a){
+			$applyCourseUri = "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html?course_id=".$a['id']."&line_id=".$sender_userid;
+			fwrite($myfile, "\xEF\xBB\xBF".$applyCourseUri); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+			if($i < 4){
+				$course_obj = array (
+					"title" => $a['course_name'],
+					"text" => $a['course_name'],
+					"actions" => array (
+						array (
+							"type" => "uri",
+							"label" => "課程報名",
+							"uri" => $applyCourseUri
+						),
+						array (
+							"type" => "postback",
+							"label" => "課程說明",
+							"data" => "introCourse&".$a['id']
+						),
+						array (
+							"type" => "uri",
+							"label" => "課程連結",
+							"uri" => $a['course_url']
+						)
+					)
+				);
+			} else {
+			}
+			
+			$json -> template -> columns[] = $course_obj;
+		}
+		return $json;
+	}
+	
+	function sign($sender_userid){
+		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
+		$result = sql_select_fetchALL($sql);
+		if($result->num_rows == 0){
+			//todo: 尋問是否要進行註冊
+			$json_str = '{
+				"type": "template",
+				"altText": "this is a carousel template",
+				"template": {
+				  "type": "confirm",
+				  "text": "請先註冊並待審核後即可進行簽到"
+				}
+		  	}';
+			$json = json_decode($json_str);
+			return $json;
+		} else {
+			$status = "";
+			foreach($result as $a){
+				$status = $a['status']; 
+			}
+			if($status == "pending") {
+				$json_str = '{
+					"type": "text",
+					"text": "註冊審核中"
+				}';
+				$json = json_decode($json_str);
+				return $json;
+			} else if($status == "active") {
+				//todo: 簽到
+			} else {
+				//todo: 註冊資料不通過
+				$json_str = '{
+					"type": "text",
+					"text": "註冊審核中"
+				}';
+				$json = json_decode($json_str);
+				return $json;
+			}
+		}
+	}
+	
+	function introCourse($course_id){
+		$sql = "SELECT * FROM `course` WHERE id = '".$course_id."'";
+		
+		$result = sql_select_fetchALL($sql);
+		$text = "";
+		foreach($result as $a){
+			$text .= $a['course_name'] ."\n"; 
+			$text .= "日期:".$a['course_startdate']."~".$a['course_enddate']."\n";
+			$text .= "時間:".$a['course_week']." ".$a['course_time']."\n";
+			$text .= "地點:".$a['course_location']."\n";
+			$text .= "老師:".$a['course_teacher']."\n";
+			$text .= "價格:".$a['course_price']."\n";
+		}
+		$json_str = '{
+			"type": "text",
+			"text": ""
+		}';
+		$json = json_decode($json_str);
+		$json -> text = $text;
+		return $json;
+	}
+	
+	function leaveCourse($course_id, $sender_userid){
+		$json_str = '{
+  			"type": "template",
+  			"altText": "this is a carousel template",
+  			"template": {
+				"type": "carousel",
+				"columns": []
+  			}
+		}';
+		$json = json_decode($json_str);
+		//列出該課程的日期
+		$sql = "SELECT cd.*, c.course_name 
+				FROM course_date cd, course c 
+				WHERE 
+					c.id = '".$course_id."' AND 
+					c.id = course_id AND 
+					course_date > CURDATE() AND 
+					cd.id NOT IN (SELECT course_date_id FROM `course_leave` WHERE line_id = '".$sender_userid."' )";
+		$result = sql_select_fetchALL($sql);
+		if($result->num_rows == 0){
+			$json_str = '{
+				"type": "text",
+				"text": "目前無日期可以請假"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		} else {
+			$course_name = "";
+			$i = 1;
+			$array = [];
+			foreach($result as $a){
+				$value = array (
+					"type" => "postback",
+					"label" => $a['course_date'],
+					"data" => "leaveCourseDate&".$a['id']
+				);
+				array_push($array, $value);
+				if($i % 3 == 0 || $i == ($result->num_rows)) {
+					if($i == ($result->num_rows) && ($result->num_rows) % 3 != 0){
+						$value = array (
+							"type" => "postback",
+							"label" => "-",
+							"data" => "-"
+						);
+						if(($result->num_rows) % 3 == 1){
+							array_push($array, $value);
+							array_push($array, $value);
+						} else if(($result->num_rows) % 3 == 2){
+							array_push($array, $value);
+						}
+					} 
+					$course_obj = array (
+						"title" => $a['course_name'],
+						"text" => "請選擇要請假的日期",
+						"actions" => $array
+					);
+					$json -> template -> columns[] = $course_obj;
+					$array = [];
+				}
+				$i++;
+			}
+			return $json;
+		}
+		
+	}
+	
+	function leaveCourseDate($date_id, $sender_userid){
+		$sql = "Insert into course_leave (course_date_id, line_id) 
+				VALUES ('".$date_id."', '".$sender_userid."')";
+		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+		$json_str = '{
+			"type": "text",
+			"text": "請假成功"
+		}';
+		$json = json_decode($json_str);
+		return $json;
+	}
+	function outCourse($course_id, $sender_userid){
+		$sql = "Insert into course_out (course_id, line_id) 
+				VALUES ('".$course_id."', '".$sender_userid."')";
+		sql_select_fetchALL($sql);
+		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+		$json_str = '{
+			"type": "text",
+			"text": "退出成功"
+		}';
+		$json = json_decode($json_str);
+		return $json;
+	}
+	function sql_select_fetchALL($sql){   
+		$db_server = "localhost";
+		$db_name = "course_management_t";
+		$db_user = "root";
+		$db_passwd = "fdd396906f5054060122311cf8b0eb2da0cfe7a437501152";
+		
+		$con=mysqli_connect($db_server, $db_user, $db_passwd) or die("資料庫登入錯誤");
+		if(mysqli_connect_errno($con)){
+			echo "ERROR1";
+		}
+		mysqli_query($con,"SET NAMES utf8");
+		mysqli_select_db($con,$db_name) or die("資料庫連結錯誤");
+		
+		$row = mysqli_query($con,$sql);
+		mysqli_close($con);
+		return $row;
+	}
+?>
