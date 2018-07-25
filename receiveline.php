@@ -287,32 +287,10 @@
 						"type": "text",
 						"text": "距離三合一選舉還有'. $diff->format("%a").'\n已參戰: '.$havesign_days.'天 \n簽到率:'.$sign_persent.'%"
 					}';
+					$json = json_decode($json_str);
+					return $json;
 				}
 			}
-			
-			
-			$json = json_decode($json_str);
-			return $json;
-			echo $diff->format("%R%a days");
-
-		}
-		if($result->num_rows == 0){
-			$sql = "INSERT INTO line_user_sign (line_id, sign_date) VALUES ('".$sender_userid."', '".date("Y-m-d")."')";
-			fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-			$result = sql_select_fetchALL($sql);
-			$json_str = '{
-				"type": "text",
-				"text": "簽到成功"
-			}';
-			$json = json_decode($json_str);
-			return $json;
-		} else {
-			$json_str = '{
-				"type": "text",
-				"text": "本日已完成簽到"
-			}';
-			$json = json_decode($json_str);
-			return $json;
 		}
 	}
 	function introCourse($course_id){
