@@ -168,7 +168,7 @@
 			if($status == 3) {
 				$json_str = '{
 					"type": "text",
-					"text": "註冊審核中"
+					"text": "註冊審核中，請耐心等待"
 				}';
 				$json = json_decode($json_str);
 				return $json;
@@ -211,7 +211,7 @@
 						{
 						  "type": "uri",
 						  "label": "註冊",
-						  "uri" => "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html"
+						  "uri": "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html"
 						}
 					  ],
 					  "title": "歡迎使用本服務",
