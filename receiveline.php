@@ -165,14 +165,14 @@
 			foreach($result as $a){
 				$status = $a['status']; 
 			}
-			if($status == "pending") {
+			if($status == 3) {
 				$json_str = '{
 					"type": "text",
 					"text": "註冊審核中"
 				}';
 				$json = json_decode($json_str);
 				return $json;
-			} else if($status == "active") {
+			} else if($status == 1) {
 				$json_str = '{
 					"type": "template",
 					"altText": "this is a buttons template",
