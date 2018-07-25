@@ -289,7 +289,7 @@
 			$date2=date_create(date("Y-m-d"));
 			$diff=date_diff($date1,$date2);
 			if($diff->format("%R") == "+"){
-				$join_date = $diff->format("%a");
+				$join_date = $diff->format("%a")+1;
 			}
 			//sign_rate
 			$sign_rate = round($signed_count/$join_date*100);
