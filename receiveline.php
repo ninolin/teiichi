@@ -69,7 +69,7 @@
 	fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 	$header[] = "Content-Type: application/json";
 	//輸入line 的 Channel access token
-	$header[] = "Authorization: Bearer ch4DaSxjxOTPaO7PR8pKHu67uotfCaPYuLK5zSw70ACvqemT77GTnzqr2b/7+jMIshCmLWf0U7bPLXsqreKz7tGzKkS6e51W8aM18nt+Jshj7DXtIUjvfUV2BZpQxM+NAXrBizCWLCDHc2/XCgrCGwdB04t89/1O/w1cDnyilFU=";
+	$header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
 	$ch = curl_init("https://api.line.me/v2/bot/message/reply");
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
