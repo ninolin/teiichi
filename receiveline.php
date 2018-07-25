@@ -229,6 +229,8 @@
 	
 	function action_sign($sender_userid){
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."' AND sign_date = '". date("Y-m-d")."'";
+		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
 		if($result->num_rows == 0){
 			$sql = "INSERT INTO line_user_sign (line_id, sign_date) 
