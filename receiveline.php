@@ -275,25 +275,31 @@
 			}
 			$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 			fwrite($myfile, "\xEF\xBB\xBF abc".$$user_created_date); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-			$date1=date_create($user_created_date);
+			//expire_date
+			$expire_date = 0;
+			$date1=date_create(date("Y-m-d"));
 			$date2=date_create("2018-11-24");
 			$diff=date_diff($date1,$date2);
-			$havesign_days = 500;
-			$sign_persent = 0;
 			if($diff->format("%R") == "+"){
-				$havesign_days = $diff->format("%a");
-				$sign_persent = round($signed_count/$havesign_days*100);
-				$date1=date_create(date("Y-m-d"));
-				$diff=date_diff($date1,$date2);
-				if($diff->format("%R") == "+"){
-					$json_str = '{
-						"type": "text",
-						"text": "距離三合一選舉還有'. $diff->format("%a").'\n已參戰: '.$havesign_days.'天 \n簽到率:'.$sign_persent.'%"
-					}';
-					$json = json_decode($json_str);
-					return $json;
-				}
+				$expire_date = $diff->format("%a");
 			}
+			//join_date
+			$join_date = 0;
+			$date1=date_create($user_created_date);
+			$date2=date_create(date("Y-m-d"));
+			$diff=date_diff($date1,$date2);
+			if($diff->format("%R") == "+"){
+				$join_date = $diff->format("%a");
+			}
+			//sign_rate
+			$sign_rate = round($signed_count/$join_date*100);
+
+			$json_str = '{
+				"type": "text",
+				"text": "距離三合一選舉還有'. $expire_date.'天\n已參戰: '.$join_date.'天 \n簽到率:'.$sign_rate.'%"
+			}';
+			$json = json_decode($json_str);
+			return $json;
 		}
 	}
 	function introCourse($course_id){
