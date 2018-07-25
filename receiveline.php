@@ -42,21 +42,21 @@
 			);
 		}
 	} else if($sender_type == "message"){
-		if($sender_txt == "sign"){
+		if($sender_txt == "每日簽到"){
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
 			      		sign($sender_userid)
 			    	)
 			);
-		} else if($sender_txt == "mission"){
+		} else if($sender_txt == "查看任務"){
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
 			      		apply($sender_userid)
 			    	)
 			);
-		} else if($sender_txt == "operation"){
+		} else if($sender_txt == "操作秘笈"){
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
