@@ -271,7 +271,8 @@
 			foreach($result as $a){
 				$user_created_date = $a['user_created_date'];
 			}
-
+			$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+			fwrite($myfile, "\xEF\xBB\xBF abc".$$user_created_date); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			$date1=date_create($user_created_date);
 			$date2=date_create("2018-11-24");
 			$diff=date_diff($date1,$date2);
