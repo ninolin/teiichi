@@ -268,7 +268,7 @@
 		$result = sql_select_fetchALL($sql);
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 			fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		if($result->num_rows == 0){
+		if($result->num_rows > 0){
 			$user_created_date = "2018-07-25";
 			foreach($result as $a){
 				$user_created_date = $a['user_created_date'];
