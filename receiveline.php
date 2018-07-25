@@ -70,6 +70,13 @@
 			      		action_sign($sender_userid)
 			    	)
 			);
+		} else if($sender_txt == "查看成就"){
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		see_achievement($sender_userid)
+			    	)
+			);
 		}
 		
 	}
@@ -233,6 +240,62 @@
 		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
 		fwrite($myfile, "\xEF\xBB\xBF rr".$result->num_rows);
+		if($result->num_rows == 0){
+			$sql = "INSERT INTO line_user_sign (line_id, sign_date) VALUES ('".$sender_userid."', '".date("Y-m-d")."')";
+			fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+			$result = sql_select_fetchALL($sql);
+			$json_str = '{
+				"type": "text",
+				"text": "簽到成功"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		} else {
+			$json_str = '{
+				"type": "text",
+				"text": "本日已完成簽到"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		}
+	}
+
+	function see_achievement($sender_userid){
+		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."'";
+		$result = sql_select_fetchALL($sql);
+		$signed_count = $result->num_rows;
+		$sql = "SELECT user_created_date FROM line_user";
+		$result = sql_select_fetchALL($sql);
+		if($result->num_rows == 0){
+			$user_created_date = "2018-07-25";
+			foreach($result as $a){
+				$user_created_date = $a['user_created_date'];
+			}
+
+			$date1=date_create($user_created_date);
+			$date2=date_create("2018-11-24");
+			$diff=date_diff($date1,$date2);
+			$havesign_days = 500;
+			$sign_persent = 0;
+			if($diff->format("%R") == "+"){
+				$havesign_days = $diff->format("%a");
+				$sign_persent = round($signed_count/$havesign_days*100);
+				$date1=date_create(date("Y-m-d"));
+				$diff=date_diff($date1,$date2);
+				if($diff->format("%R") == "+"){
+					$json_str = '{
+						"type": "text",
+						"text": "距離三合一選舉還有'. $diff->format("%a").'\n已參戰: '.$havesign_days.'天 \n簽到率:'.$sign_persent.'%"
+					}';
+				}
+			}
+			
+			
+			$json = json_decode($json_str);
+			return $json;
+			echo $diff->format("%R%a days");
+
+		}
 		if($result->num_rows == 0){
 			$sql = "INSERT INTO line_user_sign (line_id, sign_date) VALUES ('".$sender_userid."', '".date("Y-m-d")."')";
 			fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
