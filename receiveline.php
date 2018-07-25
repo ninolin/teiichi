@@ -234,8 +234,7 @@
 		$result = sql_select_fetchALL($sql);
 		fwrite($myfile, "\xEF\xBB\xBF rr".$result->num_rows);
 		if($result->num_rows == 0){
-			$sql = "INSERT INTO line_user_sign (line_id, sign_date) VALUES ('".$sender_userid."', '".$date("Y-m-d")."')";
-			$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+			$sql = "INSERT INTO line_user_sign (line_id, sign_date) VALUES ('".$sender_userid."', '".date("Y-m-d")."')";
 			fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			$result = sql_select_fetchALL($sql);
 			$json_str = '{
