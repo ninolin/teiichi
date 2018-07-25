@@ -182,21 +182,21 @@
 						{
 						  "type": "message",
 						  "label": "進行簽到",
-						  "text": "action_sign"
+						  "text": "進行簽到"
 						},
 						{
 						  "type": "message",
 						  "label": "查看成就",
-						  "text": "action_achievement"
+						  "text": "查看成就"
 						},
 						{
 						  "type": "message",
 						  "label": "編輯資料",
-						  "text": "action_editdata"
+						  "text": "編輯資料"
 						}
 					  ],
 					  "title": "每日簽到",
-					  "text": "文字"
+					  "text": "'.date("Y-m-d").'"
 					}
 				}';
 				$json = json_decode($json_str);
