@@ -63,6 +63,13 @@
 			      		apply($sender_userid)
 			    	)
 			);
+		} else if($sender_txt == "進行簽到"){
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		action_sign($sender_userid)
+			    	)
+			);
 		}
 		
 	}
@@ -136,10 +143,7 @@
 	
 	function sign($sender_userid){
 		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
-
 		if($result->num_rows == 0){
 			$json_str = '{
 				"type": "template",
@@ -157,7 +161,6 @@
 				  "text": "請註冊並審核後即可進行服務"
 				}
 			}';
-			fwrite($myfile, "\xEF\xBB\xBF".$json_str); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			$json = json_decode($json_str);
 			return $json;
 		} else {
@@ -224,6 +227,28 @@
 		}
 	}
 	
+	function action_sign($sender_userid){
+		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."' AND sign_date = '". date("Y-m-d")."'";
+		$result = sql_select_fetchALL($sql);
+		if($result->num_rows == 0){
+			$sql = "INSERT INTO line_user_sign (line_id, sign_date) 
+				VALUES ('".$sender_userid."', '".$date("Y-m-d")."')";
+			$result = sql_select_fetchALL($sql);
+			$json_str = '{
+				"type": "text",
+				"text": "簽到成功"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		} else {
+			$json_str = '{
+				"type": "text",
+				"text": "本日已完成簽到"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		}
+	}
 	function introCourse($course_id){
 		$sql = "SELECT * FROM `course` WHERE id = '".$course_id."'";
 		
