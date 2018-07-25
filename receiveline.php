@@ -156,7 +156,8 @@
 				  "text": "請註冊並審核後即可進行服務"
 				}
 			}';
-			
+			$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+			fwrite($myfile, "\xEF\xBB\xBF".$json_str); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			$json = json_decode($json_str);
 			return $json;
 		} else {
