@@ -139,6 +139,7 @@
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
+
 		if($result->num_rows == 0){
 			$json_str = '{
 				"type": "template",
@@ -338,7 +339,7 @@
 	}
 	function sql_select_fetchALL($sql){   
 		$db_server = "localhost";
-		$db_name = "course_management_t";
+		$db_name = "teiichi";
 		$db_user = "root";
 		$db_passwd = "fdd396906f5054060122311cf8b0eb2da0cfe7a437501152";
 		
@@ -346,6 +347,7 @@
 		if(mysqli_connect_errno($con)){
 			echo "ERROR1";
 		}
+	
 		mysqli_query($con,"SET NAMES utf8");
 		mysqli_select_db($con,$db_name) or die("資料庫連結錯誤");
 		
