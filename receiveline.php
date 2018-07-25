@@ -264,7 +264,7 @@
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."'";
 		$result = sql_select_fetchALL($sql);
 		$signed_count = $result->num_rows;
-		$sql = "SELECT user_created_date FROM line_user";
+		$sql = "SELECT user_created_date FROM line_user WHERE line_id ='".$sender_userid."'";
 		$result = sql_select_fetchALL($sql);
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 			fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
