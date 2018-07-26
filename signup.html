@@ -4,28 +4,28 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-	<title>註冊頁面</title>
+	<title>個資頁面</title>
 	<link rel="stylesheet" href="form-mini.css">
 </head>
 
     <div class="main-content">
         <div class="form-mini-container">
-            <h1>註冊頁面</h1>
+            <h1 id="h1tag">註冊頁面</h1>
             
-            <form class="form-mini" method="post" id="apply-course-form" action="applyCourse.php">
-                <h2>基本資料填寫並通過審核後即可開始使用本服務</h2>
+            <form class="form-mini" method="post" id="data-form" action="signup.php">
+                <h2 id="h2tag">基本資料填寫並通過審核後即可開始使用本服務</h2>
                 <div class="form-row">
                     <input type="text" name="name" placeholder="姓名">
                 </div>
                 <div class="form-row">
                     <input type="text" name="phone" placeholder="電話">
                 </div>
-                <h3>
+                <h3 id="h3tag">
                     <input type="checkbox" checked="checked">
                     您同意 <a href="policy.html">個資蒐集前告知函</a>
                 </h3>
                 <div class="form-row form-last-row">
-                    <button type="submit">註冊</button>
+                    <button id="signup-btn" type="submit">註冊</button>
                 </div>
             </form>
         </div>
@@ -33,7 +33,28 @@
 </body>
 
 <script type="text/javascript">
-    document.getElementById("apply-course-form").action = "applyCourse.php" + location.search;
+    document.getElementById("data-form").action = "signup.php" + location.search;
+    var strUrl = location.search;
+    var getPara, ParaVal;
+    var aryPara = [];
+
+    if (strUrl.indexOf("?") != -1) {
+        var getSearch = strUrl.split("?");
+        getPara = getSearch[1].split("&");
+        for (i = 0; i < getPara.length; i++) {
+            ParaVal = getPara[i].split("=");
+            aryPara.push(ParaVal[0]);
+            aryPara[ParaVal[0]] = ParaVal[1];
+        }
+        if(aryPara['type'] == 'update') {
+            document.getElementById("h1tag").innerHTML = "更新資料";
+            document.getElementById("h2tag").innerHTML = "基本資料填寫請正確";
+            document.getElementById("h3tag").style.display = "none";
+            document.getElementById("signup-btn").innerHTML = "更新資料";
+        } else if(aryPara['type'] == 'resignup') {
+            document.getElementById("signup-btn").innerHTML = "重新註冊";
+        }
+    }
 </script>
 
 </html>
