@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<title>註冊頁面</title>
+	<link rel="stylesheet" href="form-mini.css">
+</head>
+
+    <div class="main-content">
+        <div class="form-mini-container">
+            <h1>註冊頁面</h1>
+            
+            <form class="form-mini" method="post" id="apply-course-form" action="applyCourse.php">
+                <h2>基本資料填寫並通過審核後即可開始使用本服務</h2>
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="姓名">
+                </div>
+                <div class="form-row">
+                    <input type="text" name="phone" placeholder="電話">
+                </div>
+                <h3>
+                    <input type="checkbox" checked="checked">
+                    您同意 <a href="policy.html">個資蒐集前告知函</a>
+                </h3>
+                <div class="form-row form-last-row">
+                    <button type="submit">註冊</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    document.getElementById("apply-course-form").action = "applyCourse.php" + location.search;
+</script>
+
+</html>
