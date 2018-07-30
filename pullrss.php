@@ -49,9 +49,11 @@ for($i=0;$i<sizeof($rssfeed);$i++){//分解開始
         //僅讀取item標籤中的內容
         if($is_link==1){
             echo $val["attributes"]["HREF"];
+            echo "</br>";
         }
         if($is_time==1){
             echo $val["value"];
+            echo "</br>";
         }
     }
 
