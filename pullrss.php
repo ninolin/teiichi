@@ -43,7 +43,7 @@ foreach($result as $a){
         if($id != "" ){
             $sql = "SELECT * FROM alert_rss_post WHERE post_id ='".$id."'";
 		    $result = sql_select_fetchALL($sql);
-            if($result->num_rows == 0){
+            if($result->num_rows == 0 && $time != ""){
                 $sql = "INSERT INTO 
                     alert_rss_post (rss_id, post_id, post_url, post_published) 
                     VALUES 
