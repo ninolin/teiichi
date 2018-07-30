@@ -31,7 +31,7 @@ for($i=0;$i<sizeof($rssfeed);$i++){//分解開始
     //xml_parser_free -- 釋放指定的 XML 解析器
     xml_parser_free($parser);
 
-    //print_r($values);
+    print_r($values);
     foreach ($values as $val) {
         $tag = $val["tag"];
         $type = $val["type"];
