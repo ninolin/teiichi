@@ -4,42 +4,33 @@
 //RSS源地址列表數組
 $rssfeed = array("https://www.google.com.tw/alerts/feeds/10688482321941126506/10267095873014584322");
 
-
 //設置編碼為UTF-8
 header('Content-Type:text/html;charset= UTF-8');
 for($i=0;$i<sizeof($rssfeed);$i++){//分解開始
 
     $buff = "";
     $rss_str="";
-
-    //打開rss地址，並讀取，讀取失敗則中止
-    $fp = fopen($rssfeed[$i],"r") or die("can not open $rssfeed");
+    
+    $fp = fopen($rssfeed[$i],"r") or die("can not open $rssfeed");  //打開rss地址，並讀取，讀取失敗則中止
     while ( !feof($fp) ) {
         $buff .= fgets($fp,4096);
     }
+    fclose($fp);    //關閉文件打開
 
-    //關閉文件打開
-    fclose($fp);
+    $parser = xml_parser_create();  //建立一個 XML 解析器
+    xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,1); //xml_parser_set_option -- 為指定 XML 解析進行選項設置
+    xml_parse_into_struct($parser,$buff,$values,$idx);  //xml_parse_into_struct -- 將 XML 數據解析到數組$values中
+    xml_parser_free($parser);   //xml_parser_free -- 釋放指定的 XML 解析器
 
-    //建立一個 XML 解析器
-    $parser = xml_parser_create();
-
-    //xml_parser_set_option -- 為指定 XML 解析進行選項設置
-    xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,1);
-    //xml_parse_into_struct -- 將 XML 數據解析到數組$values中
-    xml_parse_into_struct($parser,$buff,$values,$idx);
-    //xml_parser_free -- 釋放指定的 XML 解析器
-    xml_parser_free($parser);
-
-    //print_r($values);
+    print_r($values);
     foreach ($values as $val) {
         $tag = $val["tag"];
         $type = $val["type"];
 
         $is_link = 0;
         $is_time = 0;
-        //標籤統一轉為小寫
-        $tag = strtolower($tag);
+       
+        $tag = strtolower($tag);     //標籤統一轉為小寫
         if ($tag == "link"){
             $is_link = 1;
         } else if ($tag == "published") {
@@ -58,9 +49,24 @@ for($i=0;$i<sizeof($rssfeed);$i++){//分解開始
             echo "</br>";
         }
     }
+}
 
-    //輸出結果
-    echo $rss_str."";
+function sql_select_fetchALL($sql){   
+    $db_server = "localhost";
+    $db_name = "teiichi";
+    $db_user = "root";
+    $db_passwd = "fdd396906f5054060122311cf8b0eb2da0cfe7a437501152";
+    
+    $con=mysqli_connect($db_server, $db_user, $db_passwd) or die("資料庫登入錯誤");
+    if(mysqli_connect_errno($con)){
+        echo "ERROR1";
+    }
 
+    mysqli_query($con,"SET NAMES utf8");
+    mysqli_select_db($con,$db_name) or die("資料庫連結錯誤");
+    
+    $row = mysqli_query($con,$sql);
+    mysqli_close($con);
+    return $row;
 }
 ?>
