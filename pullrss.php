@@ -31,27 +31,27 @@ for($i=0;$i<sizeof($rssfeed);$i++){//分解開始
     //xml_parser_free -- 釋放指定的 XML 解析器
     xml_parser_free($parser);
 
-    print_r($values);
+    //print_r($values);
     foreach ($values as $val) {
         $tag = $val["tag"];
         $type = $val["type"];
-        $value = $val["value"];
 
+        $is_link = 0;
+        $is_time = 0;
         //標籤統一轉為小寫
         $tag = strtolower($tag);
-        if ($tag == "item" && $type == "open"){
-            $is_item = 1;
-        }else if ($tag == "item" && $type == "close") {
-            //構造輸出字符串
-            $rss_str .= "<a href='".$link."' target=_blank>".$title."</a>";
-            $is_item = 0;
+        if ($tag == "link"){
+            $is_link = 1;
+        } else if ($tag == "UPDATED" || $type == "CONTENT") {
+            $is_time = 0;
         }
 
         //僅讀取item標籤中的內容
-
-        if($is_item==1){
-            if ($tag == "title") {$title = $value;}
-            if ($tag == "link") {$link = $value;}
+        if($is_link==1){
+            echo $val["attributes"]["HREF"];
+        }
+        if($is_time==1){
+            echo $val["value"];
         }
     }
 
