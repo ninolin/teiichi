@@ -41,12 +41,16 @@ foreach($result as $a){
 
         //僅讀取item標籤中的內容
         if($id != "" ){
-            $sql = "INSERT INTO 
+            $sql = "SELECT * FROM alert_rss_post WHERE post_id ='".$id."'";
+		    $result = sql_select_fetchALL($sql);
+            if($result->num_rows == 0){
+                $sql = "INSERT INTO 
                     alert_rss_post (rss_id, post_id, post_url, post_published) 
                     VALUES 
                     ('".$alert_rss_id."', '".$id."', '".$link."', '".$time."')";
-            sql_select_fetchALL($sql);
-            echo $sql;
+                sql_select_fetchALL($sql);
+                echo $sql;
+            }
             $link = "";
             $time = "";
             $id = "";
