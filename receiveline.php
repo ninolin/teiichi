@@ -133,7 +133,7 @@
 						array (
 							"type" => "uri",
 							"label" => "連結".$a['type'],
-							"uri" => $a['post_url']
+							"uri" => $a['url']
 						)
 					)
 				);
