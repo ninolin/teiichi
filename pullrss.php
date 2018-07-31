@@ -23,6 +23,7 @@ foreach($result as $a){
     xml_parser_free($parser);   //xml_parser_free -- 釋放指定的 XML 解析器
 
     print_r($values);
+    $title = "";
     $link = "";
     $time = "";
     $id = "";
@@ -37,6 +38,8 @@ foreach($result as $a){
             $time = $val["value"];
         } else if ($tag == "id") {
             $id = $val["value"];
+        } else if ($tag == "title") {
+            $title = $val["value"];
         } 
         //僅讀取item標籤中的內容
         if($id != "" ){
@@ -44,9 +47,9 @@ foreach($result as $a){
 		    $result = sql_select_fetchALL($sql);
             if($result->num_rows == 0 && $time != ""){
                 $sql = "INSERT INTO 
-                    alert_rss_post (rss_id, post_id, post_url, post_published) 
+                    alert_rss_post (rss_id, post_id, post_url, post_published, post_title) 
                     VALUES 
-                    ('".$alert_rss_id."', '".$id."', '".$link."', '".$time."')";
+                    ('".$alert_rss_id."', '".$id."', '".$link."', '".$time."', '".$title."')";
                 sql_select_fetchALL($sql);
                 echo $sql;
             }
