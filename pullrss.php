@@ -50,7 +50,7 @@ foreach($result as $a){
                 $sql = "INSERT INTO 
                     alert_rss_post (alert_id, post_id, post_url, post_published, post_title) 
                     VALUES 
-                    ('".$alert_id."', '".$id."', '".$link."', '".($date->format('Y-m-d'))."', '".$title."')";
+                    ('".$alert_id."', '".$id."', '".$link."', '".($date->getTimestamp())."', '".$title."')";
                 sql_select_fetchALL($sql);
             }
             $link = "";

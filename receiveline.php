@@ -102,15 +102,21 @@
   			}
 		}';
 		$json = json_decode($json_str);
-		$sql = "SELECT * 
-				FROM `course` 
-				WHERE course_startdate > CURDATE() and id not in 
-					(
-						SELECT course_id 
-						FROM course_student 
-						WHERE line_id = '".$sender_userid."'
-					)
-				";
+		$sql = "SELECT post_title, post_url , post_published, 'alert' as type 
+				FROM `alert_rss_post` 
+				WHERE alert_id IN (
+					SELECT alert_id 
+					FROM `alert_rss_subscribe` 
+					WHERE line_id = '".$sender_userid."'
+				) 
+				UNION 
+				SELECT post_message, post_url, lastest_update_time, 'fb' as type 
+				FROM `fb_post` 
+				WHERE page_id IN (
+					SELECT page_id 
+					FROM `fb_page_subscribe` 
+					WHERE line_id = '".$sender_userid."'
+				)";
 		$result = sql_select_fetchALL($sql);
 		$rcount = $result->num_rows;
 		$course_name = "";
