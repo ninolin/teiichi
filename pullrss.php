@@ -51,7 +51,6 @@ foreach($result as $a){
                     VALUES 
                     ('".$alert_rss_id."', '".$id."', '".$link."', '".$time."', '".$title."')";
                 sql_select_fetchALL($sql);
-                echo $sql;
             }
             $link = "";
             $time = "";
