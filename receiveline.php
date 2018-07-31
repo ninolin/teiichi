@@ -128,7 +128,7 @@
 			//if($i < 4){
 				$course_obj = array (
 					"title" => $a['title'],
-					"text" => $a['post_remark'],
+					"text" => "-",
 					"actions" => array (
 						array (
 							"type" => "uri",
