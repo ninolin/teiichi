@@ -126,9 +126,13 @@
 		$i = 0;
 		foreach($result as $a){
 			//if($i < 4){
+				$text = "-";
+				if(!is_null($a['post_remark'])){
+					$text = $a['post_remark'];
+				}
 				$course_obj = array (
 					"title" => $a['title'],
-					"text" => "-",
+					"text" => $text,
 					"actions" => array (
 						array (
 							"type" => "uri",
