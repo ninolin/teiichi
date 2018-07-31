@@ -53,7 +53,7 @@
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		apply($sender_userid)
+			      		mission($sender_userid)
 			    	)
 			);
 		} else if($sender_txt == "操作秘笈"){
@@ -92,7 +92,7 @@
 	$result = curl_exec($ch);
 	curl_close($ch);
 	
-	function apply($sender_userid){
+	function mission($sender_userid){
 		$json_str = '{
   			"type": "template",
   			"altText": "this is a carousel template",

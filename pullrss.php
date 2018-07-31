@@ -6,7 +6,7 @@ header('Content-Type:text/html;charset= UTF-8');
 $sql = "SELECT * FROM alert_rss";
 $result = sql_select_fetchALL($sql);
 foreach($result as $a){
-    $alert_rss_id = $a['id'];
+    $alert_id = $a['id'];
     $alert_rss = $a['alert_rss'];
     $buff = "";
     $rss_str="";
@@ -46,10 +46,11 @@ foreach($result as $a){
             $sql = "SELECT * FROM alert_rss_post WHERE post_id ='".$id."'";
 		    $result = sql_select_fetchALL($sql);
             if($result->num_rows == 0 && $time != ""){
+                $date = new DateTime($time, new DateTimeZone("Asia/Taipei"));
                 $sql = "INSERT INTO 
-                    alert_rss_post (rss_id, post_id, post_url, post_published, post_title) 
+                    alert_rss_post (alert_id, post_id, post_url, post_published, post_title) 
                     VALUES 
-                    ('".$alert_rss_id."', '".$id."', '".$link."', '".$time."', '".$title."')";
+                    ('".$alert_id."', '".$id."', '".$link."', '".($date->format('Y-m-d'))."', '".$title."')";
                 sql_select_fetchALL($sql);
             }
             $link = "";
