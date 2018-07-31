@@ -102,52 +102,43 @@
   			}
 		}';
 		$json = json_decode($json_str);
-		$sql = "SELECT post_title, post_url , post_published, 'alert' as type 
+		$sql = "SELECT post_title as title, post_url as url, post_published as lastest_time, post_remark, '新聞' as type 
 				FROM `alert_rss_post` 
-				WHERE alert_id IN (
-					SELECT alert_id 
-					FROM `alert_rss_subscribe` 
-					WHERE line_id = '".$sender_userid."'
-				) 
+				WHERE (post_published + 259200) > UNIX_TIMESTAMP() 
+					AND alert_id IN (
+						SELECT alert_id 
+						FROM `alert_rss_subscribe` 
+						WHERE line_id = '".$sender_userid."'
+					) 
 				UNION 
-				SELECT post_message, post_url, lastest_update_time, 'fb' as type 
+				SELECT post_message as title, post_url as url, lastest_update_time as lastest_time, post_remark, '臉書' as type 
 				FROM `fb_post` 
-				WHERE page_id IN (
-					SELECT page_id 
-					FROM `fb_page_subscribe` 
-					WHERE line_id = '".$sender_userid."'
-				)";
+				WHERE (lastest_update_time + 259200) > UNIX_TIMESTAMP()
+					AND page_id IN (
+						SELECT page_id 
+						FROM `fb_page_subscribe` 
+						WHERE line_id = '".$sender_userid."'
+					)
+				";
 		$result = sql_select_fetchALL($sql);
 		$rcount = $result->num_rows;
 		$course_name = "";
 		$i = 0;
 		foreach($result as $a){
-			$applyCourseUri = "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html?course_id=".$a['id']."&line_id=".$sender_userid;
-			fwrite($myfile, "\xEF\xBB\xBF".$applyCourseUri); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-			if($i < 4){
+			//if($i < 4){
 				$course_obj = array (
-					"title" => $a['course_name'],
-					"text" => $a['course_name'],
+					"title" => $a['title'],
+					"text" => $a['post_remark'],
 					"actions" => array (
 						array (
 							"type" => "uri",
-							"label" => "課程報名",
-							"uri" => $applyCourseUri
-						),
-						array (
-							"type" => "postback",
-							"label" => "課程說明",
-							"data" => "introCourse&".$a['id']
-						),
-						array (
-							"type" => "uri",
-							"label" => "課程連結",
-							"uri" => $a['course_url']
+							"label" => "連結".$a['type'],
+							"uri" => $a['post_url']
 						)
 					)
 				);
-			} else {
-			}
+			//} else {
+			//}
 			
 			$json -> template -> columns[] = $course_obj;
 		}
