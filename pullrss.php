@@ -22,7 +22,7 @@ foreach($result as $a){
     xml_parse_into_struct($parser,$buff,$values,$idx);  //xml_parse_into_struct -- 將 XML 數據解析到數組$values中
     xml_parser_free($parser);   //xml_parser_free -- 釋放指定的 XML 解析器
 
-    //print_r($values);
+    print_r($values);
     $link = "";
     $time = "";
     $id = "";
@@ -38,7 +38,6 @@ foreach($result as $a){
         } else if ($tag == "id") {
             $id = $val["value"];
         } 
-
         //僅讀取item標籤中的內容
         if($id != "" ){
             $sql = "SELECT * FROM alert_rss_post WHERE post_id ='".$id."'";
