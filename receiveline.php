@@ -164,7 +164,7 @@
 					{
 					  "type": "uri",
 					  "label": "註冊",
-					  "uri": "https://sporzfy.com/fb/teiichi/signup.html"
+					  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id=".$sender_userid
 					}
 				  ],
 				  "title": "歡迎使用本服務",
