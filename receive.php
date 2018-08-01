@@ -17,9 +17,13 @@ try {
         $f_post_id = $json_obj->entry[0]->changes[0]->value->post_id;
         $f_verb = $json_obj->entry[0]->changes[0]->value->verb;
         $f_created_time = $json_obj->entry[0]->changes[0]->value->created_time;
-        $f_message = substr($json_obj->entry[0]->changes[0]->value->message, 0, 35);
+        
         $f_parent_id = $json_obj->entry[0]->changes[0]->value->parent_id;
         $f_comment_id = $json_obj->entry[0]->changes[0]->value->comment_id;
+        $f_message = $json_obj->entry[0]->changes[0]->value->message;
+        if(strlen($f_message) >= 36) {
+            $f_message = substr($json_obj->entry[0]->changes[0]->value->message, 0, 35);
+        }
         //檢查fb_page是否有紀錄
         $sql = "SELECT * FROM fb_page WHERE page_id ='".$f_page_id ."'";
         $result = sql_select_fetchALL($sql);

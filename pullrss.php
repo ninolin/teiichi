@@ -39,7 +39,10 @@ foreach($result as $a){
         } else if ($tag == "id") {
             $id = $val["value"];
         } else if ($tag == "title") {
-            $title = substr($val["value"], 0, 35);
+            $title = $val["value"];
+            if(strlen($string) >= 36){
+                $title = substr($val["value"], 0, 35);
+            } 
         } 
         //僅讀取item標籤中的內容
         if($id != "" ){
