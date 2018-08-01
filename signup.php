@@ -4,6 +4,9 @@
     $name = $_POST['name'];
     $phone = $_POST['phone'];
     
+ $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+		fwrite($myfile, "\xEF\xBB\xBF".$line_id); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+
     if($type == 'add'){
         $sql = "INSERT INTO line_user 
                 (line_id, name, phone, user_created_date) 
