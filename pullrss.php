@@ -40,14 +40,8 @@ foreach($result as $a){
             $id = $val["value"];
         } else if ($tag == "title") {
             $title = $val["value"];
-            echo $title;
-            echo "</br>";
-            echo "l:".mb_strlen($title);
-            echo "</br>";
             if(mb_strlen($title) >= 35){
                 $title = mb_substr($title, 0, 35, "utf-8");
-                echo "s:".mb_substr($title, 0, 35, "utf-8");
-                echo "</br>";
             } 
         } 
         //僅讀取item標籤中的內容
