@@ -40,8 +40,11 @@ foreach($result as $a){
             $id = $val["value"];
         } else if ($tag == "title") {
             $title = $val["value"];
+            echo $title;
+            echo "l:".strlen($title);
             if(strlen($title) >= 35){
                 $title = substr($title, 0, 35);
+                echo "s:".substr($title, 0, 35);
             } 
         } 
         //僅讀取item標籤中的內容
