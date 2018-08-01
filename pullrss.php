@@ -45,8 +45,8 @@ foreach($result as $a){
             echo "l:".mb_strlen($title);
             echo "</br>";
             if(mb_strlen($title) >= 35){
-                $title = substr($title, 0, 35);
-                echo "s:".substr($title, 0, 35);
+                $title = mb_substr($title, 0, 35, "utf-8");
+                echo "s:".mb_substr($title, 0, 35, "utf-8");
                 echo "</br>";
             } 
         } 
