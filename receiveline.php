@@ -60,7 +60,7 @@
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		apply($sender_userid)
+			      		operation($sender_userid)
 			    	)
 			);
 		} else if($sender_txt == "進行簽到"){
@@ -92,6 +92,7 @@
 	$result = curl_exec($ch);
 	curl_close($ch);
 	
+	//查看任務
 	function mission($sender_userid){
 		$json_str = '{
   			"type": "template",
@@ -149,6 +150,7 @@
 		return $json;
 	}
 	
+	//每日簽到
 	function sign($sender_userid){
 		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
 		$result = sql_select_fetchALL($sql);
@@ -235,6 +237,7 @@
 		}
 	}
 	
+	//進行簽到
 	function action_sign($sender_userid){
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."' AND sign_date = '". date("Y-m-d")."'";
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
@@ -261,6 +264,7 @@
 		}
 	}
 
+	//查看成就
 	function see_achievement($sender_userid){
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."'";
 		$result = sql_select_fetchALL($sql);
@@ -303,119 +307,35 @@
 			return $json;
 		}
 	}
-	function introCourse($course_id){
-		$sql = "SELECT * FROM `course` WHERE id = '".$course_id."'";
-		
-		$result = sql_select_fetchALL($sql);
-		$text = "";
-		foreach($result as $a){
-			$text .= $a['course_name'] ."\n"; 
-			$text .= "日期:".$a['course_startdate']."~".$a['course_enddate']."\n";
-			$text .= "時間:".$a['course_week']." ".$a['course_time']."\n";
-			$text .= "地點:".$a['course_location']."\n";
-			$text .= "老師:".$a['course_teacher']."\n";
-			$text .= "價格:".$a['course_price']."\n";
-		}
+
+	//操作秘笈
+	function operation($sender_userid){
 		$json_str = '{
-			"type": "text",
-			"text": ""
-		}';
-		$json = json_decode($json_str);
-		$json -> text = $text;
-		return $json;
-	}
-	
-	function leaveCourse($course_id, $sender_userid){
-		$json_str = '{
-  			"type": "template",
-  			"altText": "this is a carousel template",
-  			"template": {
-				"type": "carousel",
-				"columns": []
-  			}
-		}';
-		$json = json_decode($json_str);
-		//列出該課程的日期
-		$sql = "SELECT cd.*, c.course_name 
-				FROM course_date cd, course c 
-				WHERE 
-					c.id = '".$course_id."' AND 
-					c.id = course_id AND 
-					course_date > CURDATE() AND 
-					cd.id NOT IN (SELECT course_date_id FROM `course_leave` WHERE line_id = '".$sender_userid."' )";
-		$result = sql_select_fetchALL($sql);
-		if($result->num_rows == 0){
-			$json_str = '{
-				"type": "text",
-				"text": "目前無日期可以請假"
-			}';
-			$json = json_decode($json_str);
-			return $json;
-		} else {
-			$course_name = "";
-			$i = 1;
-			$array = [];
-			foreach($result as $a){
-				$value = array (
-					"type" => "postback",
-					"label" => $a['course_date'],
-					"data" => "leaveCourseDate&".$a['id']
-				);
-				array_push($array, $value);
-				if($i % 3 == 0 || $i == ($result->num_rows)) {
-					if($i == ($result->num_rows) && ($result->num_rows) % 3 != 0){
-						$value = array (
-							"type" => "postback",
-							"label" => "-",
-							"data" => "-"
-						);
-						if(($result->num_rows) % 3 == 1){
-							array_push($array, $value);
-							array_push($array, $value);
-						} else if(($result->num_rows) % 3 == 2){
-							array_push($array, $value);
-						}
-					} 
-					$course_obj = array (
-						"title" => $a['course_name'],
-						"text" => "請選擇要請假的日期",
-						"actions" => $array
-					);
-					$json -> template -> columns[] = $course_obj;
-					$array = [];
+			"type": "template",
+			"altText": "this is a buttons template",
+			"template": {
+			  "type": "buttons",
+			  "actions": [
+				{
+				  "type": "message",
+				  "label": "訂閱侯選人",
+				  "text": "訂閱侯選人"
+				},
+				{
+				  "type": "message",
+				  "label": "操作說明",
+				  "text": "操作說明"
 				}
-				$i++;
+			  ],
+			  "title": "操作秘笈",
+			  "text": "操作秘笈"
 			}
-			return $json;
-		}
-		
+		}';
+		$json = json_decode($json_str);
+		return $json;
 	}
 	
-	function leaveCourseDate($date_id, $sender_userid){
-		$sql = "Insert into course_leave (course_date_id, line_id) 
-				VALUES ('".$date_id."', '".$sender_userid."')";
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		$json_str = '{
-			"type": "text",
-			"text": "請假成功"
-		}';
-		$json = json_decode($json_str);
-		return $json;
-	}
-	function outCourse($course_id, $sender_userid){
-		$sql = "Insert into course_out (course_id, line_id) 
-				VALUES ('".$course_id."', '".$sender_userid."')";
-		sql_select_fetchALL($sql);
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		$json_str = '{
-			"type": "text",
-			"text": "退出成功"
-		}';
-		$json = json_decode($json_str);
-		return $json;
-	}
+	
 	function sql_select_fetchALL($sql){   
 		$db_server = "localhost";
 		$db_name = "teiichi";
