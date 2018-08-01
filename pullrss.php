@@ -40,7 +40,7 @@ foreach($result as $a){
             $id = $val["value"];
         } else if ($tag == "title") {
             $title = $val["value"];
-            if(strlen($string) >= 36){
+            if(strlen($val["value"]) >= 36){
                 $title = substr($val["value"], 0, 35);
             } 
         } 
