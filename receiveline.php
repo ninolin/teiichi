@@ -164,7 +164,7 @@
 					{
 					  "type": "uri",
 					  "label": "註冊",
-					  "uri": "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html"
+					  "uri": "https://sporzfy.com/fb/teiichi/signup.html"
 					}
 				  ],
 				  "title": "歡迎使用本服務",
