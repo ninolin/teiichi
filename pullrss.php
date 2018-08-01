@@ -42,9 +42,9 @@ foreach($result as $a){
             $title = $val["value"];
             echo $title;
             echo "</br>";
-            echo "l:".strlen($title);
+            echo "l:".mb_strlen($title);
             echo "</br>";
-            if(strlen($title) >= 35){
+            if(mb_strlen($title) >= 35){
                 $title = substr($title, 0, 35);
                 echo "s:".substr($title, 0, 35);
                 echo "</br>";
