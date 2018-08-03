@@ -162,7 +162,7 @@
 						array (
 							"type" 	=> "postback",
 							"label"	=> "下一頁",
-							"data"	=> "nextmession&page=".$page++
+							"data"	=> "nextmession&page=".++$page
 						)
 					)
 				);
