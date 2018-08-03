@@ -137,45 +137,10 @@
 
 		foreach($result as $key => $a){
 			fwrite($myfile, "\xEF\xBB\xBF".$key); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-			if($key >= $page_start && $key <= $page_end){
-				
-				$text = "-";
-				if(!is_null($a['post_remark'])){
-					$text = $a['post_remark'];
-				}
-				$course_obj = array (
-					"title" => $a['title'],
-					"text" => $text,
-					"actions" => array (
-						array (
-							"type" => "uri",
-							"label" => "連結".$a['type'],
-							"uri" => $a['url']
-						)
-					)
-				);
-				$json -> template -> columns[] = $course_obj;
-
-			}
-
-			if($key == ($page_end+1))
-				$course_obj = array (
-					"title" => "下一頁還有喔",
-					"text" => "",
-					"actions" => array (
-						array (
-							"type" 	=> "postback",
-							"label"	=> "下一頁",
-							"data"	=> "nextmession&page=".$page++
-						)
-					)
-				);
-				$json -> template -> columns[] = $course_obj;
-				break;
-			}
+		
 			
-			/*
-			if(intval($i) >= intval($page_start) && intval($i) <= intval($page_end)){
+			
+			if($i >= $page_start && $i <= $page_end){
 				
 				fwrite($myfile, "\xEF\xBB\xBF". "i = " . $i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 				fwrite($myfile, "\xEF\xBB\xBF". "page_start = " . $page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
@@ -200,7 +165,7 @@
 				);
 				$json -> template -> columns[] = $course_obj;
 			}
-			if($i == $page_end ){
+			if($i == ($page_end+1) ){
 				$course_obj = array (
 					"title" => "下一頁還有喔",
 					"text" => "",
@@ -215,7 +180,6 @@
 				$json -> template -> columns[] = $course_obj;
 			}
 			$i++;
-			*/
 		
 		return $json;
 	}
