@@ -131,7 +131,7 @@
 		$page_start = $page_end - 4;
 		$i = 1;
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$page_page."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+		fwrite($myfile, "\xEF\xBB\xBF".$page."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		fwrite($myfile, "\xEF\xBB\xBF".$page_start."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		fwrite($myfile, "\xEF\xBB\xBF".$page_end."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		foreach($result as $a){
@@ -163,7 +163,7 @@
 						array (
 							"type" 	=> "postback",
 							"label"	=> "下一頁",
-							"data"	=> "nextmession&page=".++$page
+							"data"	=> "nextmession&".++$page
 						)
 					)
 				);
