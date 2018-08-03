@@ -137,9 +137,7 @@
 
 		foreach($result as $a){
 			fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		
-			
-			
+			/*
 			if($i >= $page_start && $i <= $page_end){
 				
 				fwrite($myfile, "\xEF\xBB\xBF". "i = " . $i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
@@ -178,7 +176,7 @@
 					)
 				);
 				$json -> template -> columns[] = $course_obj;
-			}
+			}*/
 			$i++;
 		
 		return $json;
