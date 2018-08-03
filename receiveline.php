@@ -151,6 +151,7 @@
 						)
 					)
 				);
+				$json -> template -> columns[] = $course_obj;
 			}
 			if($i == $page_end++){
 				$course_obj = array (
@@ -164,8 +165,8 @@
 						)
 					)
 				);
+				$json -> template -> columns[] = $course_obj;
 			}
-			$json -> template -> columns[] = $course_obj;
 			$i++;
 		}
 		return $json;
