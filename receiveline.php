@@ -157,7 +157,7 @@
 			if($i == ($page_end+1)){
 				$course_obj = array (
 					"title" => "下一頁還有喔",
-					"text" => "",
+					"text" => "-",
 					"actions" => array (
 						array (
 							"type" 	=> "postback",
