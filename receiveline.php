@@ -130,16 +130,16 @@
 		$course_name = "";
 		$page_end = 5 * $page;
 		$page_start = $page_end - 4;
-		$i = 1;
+	
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 		fwrite($myfile, "\xEF\xBB\xBF".$page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		fwrite($myfile, "\xEF\xBB\xBF".$page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+
+		fwrite($myfile, "\xEF\xBB\xBF".'============'); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		foreach($result as  $key => $a){
-			
-
-
+		/*	
 			if($key >= $page_start && $key <= $page_end){
-				fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+				fwrite($myfile, "\xEF\xBB\xBF".$key); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 				$text = "-";
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
@@ -158,9 +158,32 @@
 				$json -> template -> columns[] = $course_obj;
 
 			}
-			/*
+
+			if($key == $page_end++){
+				$course_obj = array (
+					"title" => "下一頁還有喔",
+					"text" => "",
+					"actions" => array (
+						array (
+							"type" 	=> "postback",
+							"label"	=> "下一頁",
+							"data"	=> "nextmession&page=".$page++
+						)
+					)
+				);
+				$json -> template -> columns[] = $course_obj;
+				break;
+			}
+			*/
+			
 			if(intval($i) >= intval($page_start) && intval($i) <= intval($page_end)){
-				fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+				
+				fwrite($myfile, "\xEF\xBB\xBF". "i = " . $i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+				fwrite($myfile, "\xEF\xBB\xBF". "page_start = " . $page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+				fwrite($myfile, "\xEF\xBB\xBF". "page_end = " . $page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+				fwrite($myfile, "\xEF\xBB\xBF". "========= "); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+
+
 				$text = "-";
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
@@ -192,7 +215,7 @@
 				);
 				$json -> template -> columns[] = $course_obj;
 			}
-			$i++;*/
+			$i++;
 		}
 		return $json;
 	}
