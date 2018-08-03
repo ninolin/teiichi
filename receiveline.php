@@ -103,23 +103,26 @@
   			}
 		}';
 		$json = json_decode($json_str);
-		$sql = "SELECT post_title as title, post_url as url, post_published as lastest_time, post_remark, '新聞' as type 
-				FROM `alert_rss_post` 
-				WHERE (post_published + 259200) > UNIX_TIMESTAMP() 
-					AND alert_id IN (
-						SELECT alert_id 
-						FROM `alert_rss_subscribe` 
-						WHERE line_id = '".$sender_userid."'
-					) 
-				UNION 
-				SELECT post_message as title, post_url as url, lastest_update_time as lastest_time, post_remark, '臉書' as type 
-				FROM `fb_post` 
-				WHERE (lastest_update_time + 259200) > UNIX_TIMESTAMP()
-					AND page_id IN (
-						SELECT page_id 
-						FROM `fb_page_subscribe` 
-						WHERE line_id = '".$sender_userid."'
-					)
+		$sql = "SELECT * FROM (
+					SELECT post_title as title, post_url as url, post_published as lastest_time, post_remark, '新聞' as type 
+					FROM `alert_rss_post` 
+					WHERE (post_published + 259200) > UNIX_TIMESTAMP() 
+						AND alert_id IN (
+							SELECT alert_id 
+							FROM `alert_rss_subscribe` 
+							WHERE line_id = '".$sender_userid."'
+						) 
+					UNION 
+					SELECT post_message as title, post_url as url, lastest_update_time as lastest_time, post_remark, '臉書' as type 
+					FROM `fb_post` 
+					WHERE (lastest_update_time + 259200) > UNIX_TIMESTAMP()
+						AND page_id IN (
+							SELECT page_id 
+							FROM `fb_page_subscribe` 
+							WHERE line_id = '".$sender_userid."'
+						)
+					) as post 
+				ORDER BY lastest_time DESC
 				";
 		
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
