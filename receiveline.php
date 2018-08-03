@@ -134,9 +134,8 @@
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 		fwrite($myfile, "\xEF\xBB\xBF".$page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		fwrite($myfile, "\xEF\xBB\xBF".$page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		foreach($result as $a){
-			
-			if($i >= $page_start && $i <= $page_end){
+		foreach($result as  $a){
+			if(intval($i) >= intval($page_start) && intval($i) <= intval($page_end)){
 				fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 				$text = "-";
 				if(!is_null($a['post_remark'])){
