@@ -136,7 +136,7 @@
 		fwrite($myfile, "\xEF\xBB\xBF".$page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 
 		foreach($result as $a){
-			fwrite($myfile, "\xEF\xBB\xBF".$key); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+			fwrite($myfile, "\xEF\xBB\xBF".$a); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		
 			
 			
