@@ -19,6 +19,27 @@
 			      		mission(explode("&",$postback_data)[1])
 			    	)
 			); 
+		} else if(explode("&",$postback_data)[0] == "leaveCourse"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		leaveCourse(explode("&",$postback_data)[1], $sender_userid)
+			    	)
+			);
+		} else if(explode("&",$postback_data)[0] == "leaveCourseDate"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		leaveCourseDate(explode("&",$postback_data)[1], $sender_userid)
+			    	)
+			);
+		} else if(explode("&",$postback_data)[0] == "outCourse"){ 
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		outCourse(explode("&",$postback_data)[1], $sender_userid)
+			    	)
+			);
 		}
 	} else if($sender_type == "message"){
 		if($sender_txt == "每日簽到"){
@@ -59,7 +80,6 @@
 		}
 		
 	}
-
 	fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 	$header[] = "Content-Type: application/json";
 	//輸入line 的 Channel access token
@@ -104,7 +124,6 @@
 					) as post 
 				ORDER BY lastest_time DESC
 				";
-
 		$result = sql_select_fetchALL($sql);
 		$rcount = $result->num_rows;
 		$course_name = "";
@@ -114,18 +133,10 @@
 		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 		fwrite($myfile, "\xEF\xBB\xBF".$page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		fwrite($myfile, "\xEF\xBB\xBF".$page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-
 		foreach($result as $a){
-			fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-			/*
+			
 			if($i >= $page_start && $i <= $page_end){
-				
-				fwrite($myfile, "\xEF\xBB\xBF". "i = " . $i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-				fwrite($myfile, "\xEF\xBB\xBF". "page_start = " . $page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-				fwrite($myfile, "\xEF\xBB\xBF". "page_end = " . $page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-				fwrite($myfile, "\xEF\xBB\xBF". "========= "); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-
-
+				fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 				$text = "-";
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
@@ -143,7 +154,7 @@
 				);
 				$json -> template -> columns[] = $course_obj;
 			}
-			if($i == ($page_end+1) ){
+			if($i == $page_end++){
 				$course_obj = array (
 					"title" => "下一頁還有喔",
 					"text" => "",
@@ -156,7 +167,7 @@
 					)
 				);
 				$json -> template -> columns[] = $course_obj;
-			}*/
+			}
 			$i++;
 		}
 		return $json;
@@ -275,7 +286,6 @@
 			return $json;
 		}
 	}
-
 	//查看成就
 	function see_achievement($sender_userid){
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."'";
@@ -310,7 +320,6 @@
 			}
 			//sign_rate
 			$sign_rate = round($signed_count/$join_date*100);
-
 			$json_str = '{
 				"type": "text",
 				"text": "距離三合一選舉還有'. $expire_date.'天\n已參戰: '.$join_date.'天 \n簽到率:'.$sign_rate.'%"
@@ -319,7 +328,6 @@
 			return $json;
 		}
 	}
-
 	//操作秘笈
 	function operation($sender_userid){
 		$json_str = '{
@@ -348,7 +356,7 @@
 	}
 	
 	
-	function sql_select_fetchALL(...$sql){   
+	function sql_select_fetchALL($sql){   
 		$db_server = "localhost";
 		$db_name = "teiichi";
 		$db_user = "root";
