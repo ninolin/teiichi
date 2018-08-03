@@ -166,6 +166,7 @@
 				);
 			}
 			$json -> template -> columns[] = $course_obj;
+			$i++;
 		}
 		return $json;
 	}
