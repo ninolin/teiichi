@@ -53,7 +53,7 @@
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		mission($sender_userid, 0)
+			      		mission($sender_userid, 1)
 			    	)
 			);
 		} else if($sender_txt == "操作秘笈"){
