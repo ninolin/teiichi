@@ -121,6 +121,10 @@
 						WHERE line_id = '".$sender_userid."'
 					)
 				";
+		
+		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+
 		$result = sql_select_fetchALL($sql);
 		$rcount = $result->num_rows;
 		$course_name = "";
