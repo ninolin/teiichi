@@ -19,27 +19,6 @@
 			      		mission(explode("&",$postback_data)[1])
 			    	)
 			); 
-		} else if(explode("&",$postback_data)[0] == "leaveCourse"){ 
-			$response = array (
-				"replyToken" => $sender_replyToken,
-				"messages" => array (
-			      		leaveCourse(explode("&",$postback_data)[1], $sender_userid)
-			    	)
-			);
-		} else if(explode("&",$postback_data)[0] == "leaveCourseDate"){ 
-			$response = array (
-				"replyToken" => $sender_replyToken,
-				"messages" => array (
-			      		leaveCourseDate(explode("&",$postback_data)[1], $sender_userid)
-			    	)
-			);
-		} else if(explode("&",$postback_data)[0] == "outCourse"){ 
-			$response = array (
-				"replyToken" => $sender_replyToken,
-				"messages" => array (
-			      		outCourse(explode("&",$postback_data)[1], $sender_userid)
-			    	)
-			);
 		}
 	} else if($sender_type == "message"){
 		if($sender_txt == "每日簽到"){
@@ -80,6 +59,7 @@
 		}
 		
 	}
+
 	fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 	$header[] = "Content-Type: application/json";
 	//輸入line 的 Channel access token
@@ -137,7 +117,7 @@
 
 		foreach($result as $a){
 			fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-			/*
+			
 			if($i >= $page_start && $i <= $page_end){
 				
 				fwrite($myfile, "\xEF\xBB\xBF". "i = " . $i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
@@ -176,9 +156,9 @@
 					)
 				);
 				$json -> template -> columns[] = $course_obj;
-			}*/
+			}
 			$i++;
-		
+		}
 		return $json;
 	}
 	
