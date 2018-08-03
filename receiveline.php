@@ -16,7 +16,7 @@
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		mission(explode("&",$postback_data)[1])
+			      		mission($sender_userid, explode("&",$postback_data)[1])
 			    	)
 			); 
 		} else if(explode("&",$postback_data)[0] == "leaveCourse"){ 
