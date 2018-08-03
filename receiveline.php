@@ -12,11 +12,11 @@
 	
 	if($sender_type == "postback"){ //訊息的type為postback(選單)
 		$postback_data = $json_obj->events[0]->postback->data; //取得postback的data
-		if(explode("&",$postback_data)[0] == "introCourse"){ 
+		if(explode("&",$postback_data)[0] == "nextmession"){ 
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		introCourse(explode("&",$postback_data)[1])
+			      		mission(explode("&",$postback_data)[1])
 			    	)
 			); 
 		} else if(explode("&",$postback_data)[0] == "leaveCourse"){ 
@@ -53,7 +53,7 @@
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		mission($sender_userid)
+			      		mission($sender_userid, 0)
 			    	)
 			);
 		} else if($sender_txt == "操作秘笈"){
@@ -93,7 +93,7 @@
 	curl_close($ch);
 	
 	//查看任務
-	function mission($sender_userid){
+	function mission($sender_userid, $page){
 		$json_str = '{
   			"type": "template",
   			"altText": "this is a carousel template",
@@ -131,9 +131,11 @@
 		$result = sql_select_fetchALL($sql);
 		$rcount = $result->num_rows;
 		$course_name = "";
-		$i = 0;
+		$page_end = 5 * $page;
+		$page_start = $page_end - 4;
+		$i = 1;
 		foreach($result as $a){
-			//if($i < 4){
+			if($i >= $page_start && $i <= $page_end){
 				$text = "-";
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
@@ -149,9 +151,20 @@
 						)
 					)
 				);
-			//} else {
-			//}
-			
+			}
+			if($i == $page_end++){
+				$course_obj = array (
+					"title" => "下一頁還有喔",
+					"text" => "",
+					"actions" => array (
+						array (
+							"type" 	=> "postback",
+							"label"	=> "下一頁",
+							"data"	=> "nextmession&page=".$page++
+						)
+					)
+				);
+			}
 			$json -> template -> columns[] = $course_obj;
 		}
 		return $json;
