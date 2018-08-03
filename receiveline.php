@@ -135,9 +135,8 @@
 		fwrite($myfile, "\xEF\xBB\xBF".$page_start); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		fwrite($myfile, "\xEF\xBB\xBF".$page_end); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 
-		fwrite($myfile, "\xEF\xBB\xBF".'============'); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		foreach($result as  $key => $a){
-		/*	
+		foreach($result as $key => $a){
+			
 			if($key >= $page_start && $key <= $page_end){
 				fwrite($myfile, "\xEF\xBB\xBF".$key); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 				$text = "-";
@@ -159,7 +158,7 @@
 
 			}
 
-			if($key == $page_end++){
+			if($key == ($page_end+1))
 				$course_obj = array (
 					"title" => "下一頁還有喔",
 					"text" => "",
@@ -174,8 +173,8 @@
 				$json -> template -> columns[] = $course_obj;
 				break;
 			}
-			*/
 			
+			/*
 			if(intval($i) >= intval($page_start) && intval($i) <= intval($page_end)){
 				
 				fwrite($myfile, "\xEF\xBB\xBF". "i = " . $i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
@@ -201,7 +200,7 @@
 				);
 				$json -> template -> columns[] = $course_obj;
 			}
-			if($i == $page_end++){
+			if($i == $page_end ){
 				$course_obj = array (
 					"title" => "下一頁還有喔",
 					"text" => "",
@@ -216,7 +215,8 @@
 				$json -> template -> columns[] = $course_obj;
 			}
 			$i++;
-		}
+			*/
+		
 		return $json;
 	}
 	
@@ -406,7 +406,7 @@
 	}
 	
 	
-	function sql_select_fetchALL($sql){   
+	function sql_select_fetchALL(...$sql){   
 		$db_server = "localhost";
 		$db_name = "teiichi";
 		$db_user = "root";
