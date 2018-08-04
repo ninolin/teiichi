@@ -3,7 +3,7 @@
 return array(
 	
 	
-		'ip'       => '139.59.123.8',
+		'ip'       => 'localhost',
 		'port'     => '3306',
 		'account'  => 'root',
 		'password' => 'fdd396906f5054060122311cf8b0eb2da0cfe7a437501152',

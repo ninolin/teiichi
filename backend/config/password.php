@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'account' => 'admin',
+    'account'  => 'admin',
     'password' => '123123',
 );
 
