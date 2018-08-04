@@ -118,7 +118,7 @@
 							FROM `alert_rss_subscribe` 
 							WHERE line_id = '".$sender_userid."'
 						) 
-						AND post_hide = 1 
+						AND post_hide = 2 
 					UNION 
 					SELECT post_message as title, post_url as url, lastest_update_time as lastest_time, post_remark, '臉書' as type 
 					FROM `fb_post` 
