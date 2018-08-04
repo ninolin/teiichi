@@ -447,9 +447,9 @@
 			$json = json_decode($json_str);
 			return $json;
 		} else {
-			$sql = "DELETE FROM alert_rss_subscribe WHERE line_id = '".$sender_userid."'";
+			$sql = "DELETE FROM alert_rss_subscribe WHERE line_id = '".$sender_userid."' AND alert_id = '".$alert_id."'";
 			sql_select_fetchALL($sql);
-			$sql = "DELETE FROM fb_page_subscribe WHERE line_id = '".$sender_userid."'";
+			$sql = "DELETE FROM fb_page_subscribe WHERE line_id = '".$sender_userid."' AND page_id = '".$page_id."'";
 			sql_select_fetchALL($sql);
 			$json_str = '{
 				"type": "text",
