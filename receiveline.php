@@ -199,7 +199,7 @@
 					{
 					  "type": "uri",
 					  "label": "註冊",
-					  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'"
+					  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'?type=add"
 					}
 				  ],
 				  "title": "歡迎使用本服務",
@@ -259,7 +259,7 @@
 						{
 						  "type": "uri",
 						  "label": "註冊",
-						  "uri": "https://sporzfy.com/chtChatBot/ninoiii0507/applyCourse.html"
+						  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'?type=resignup"
 						}
 					  ],
 					  "title": "歡迎使用本服務",
@@ -352,7 +352,7 @@
 			$json = json_decode($json_str);
 			return $json;
 		}
-		
+
 		$json_str = '{
 			"type": "template",
 			"altText": "this is a buttons template",
