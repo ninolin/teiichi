@@ -19,28 +19,14 @@
 			      		mission($sender_userid, explode("&",$postback_data)[1])
 			    	)
 			); 
-		} else if(explode("&",$postback_data)[0] == "leaveCourse"){ 
+		} else if(explode("&",$postback_data)[0] == "sub" || explode("&",$postback_data)[0] == "unsub"){ 
 			$response = array (
 				"replyToken" => $sender_replyToken,
 				"messages" => array (
-			      		leaveCourse(explode("&",$postback_data)[1], $sender_userid)
+			      		subscribe(explode("&",$postback_data)[0], explode("&",$postback_data)[1], explode("&",$postback_data)[2], $sender_userid)
 			    	)
 			);
-		} else if(explode("&",$postback_data)[0] == "leaveCourseDate"){ 
-			$response = array (
-				"replyToken" => $sender_replyToken,
-				"messages" => array (
-			      		leaveCourseDate(explode("&",$postback_data)[1], $sender_userid)
-			    	)
-			);
-		} else if(explode("&",$postback_data)[0] == "outCourse"){ 
-			$response = array (
-				"replyToken" => $sender_replyToken,
-				"messages" => array (
-			      		outCourse(explode("&",$postback_data)[1], $sender_userid)
-			    	)
-			);
-		}
+		} 
 	} else if($sender_type == "message"){
 		if($sender_txt == "每日簽到"){
 			$response = array (
@@ -408,7 +394,7 @@
 					FROM alert_rss_subscribe 
 					WHERE alert_id = '".$a['alert_id']."' AND line_id = '".$sender_userid."'";
 			$result2 = sql_select_fetchALL($sql);
-			if($result->num_rows == 0) {
+			if($result2->num_rows == 0) {
 				$course_obj = array (
 					"title" => $a['name'],
 					"text" => "歡迎訂閱「".$a['name']."」臉書粉絲團及新聞",
@@ -416,7 +402,7 @@
 						array (
 							"type" => "postback",
 							"label"=> "訂閱",
-				  			"data"=> "sub&".$a['alert_id']
+				  			"data"=> "sub&".$a['alert_id']."&".$a['page_id']
 						)
 					)
 				);
@@ -428,7 +414,7 @@
 						array (
 							"type" => "postback",
 							"label"=> "取消訂閱",
-				  			"data"=> "unsub&".$a['alert_id']
+				  			"data"=> "unsub&".$a['alert_id']."&".$a['page_id']
 						)
 					)
 				);
@@ -436,6 +422,42 @@
 			$json -> template -> columns[] = $course_obj;
 		}
 		return $json;
+	}
+
+	function subscribe($action, $alert_id, $page_id, $sender_userid) {
+		if($action == "sub") {
+			$sql = "SELECT * FROM alert_rss_subscribe WHERE line_id ='".$sender_userid."' AND alert_id = '".$alert_id."'";
+			$result = sql_select_fetchALL($sql);
+			if($result->num_rows == 0){
+				$sql = "INSERT INTO alert_rss_subscribe 
+							(alert_id, line_id) 
+						VALUES 
+							('".$alert_id."', '".$sender_userid."')";
+				$result = sql_select_fetchALL($sql);
+				$sql = "INSERT INTO fb_page_subscribe 
+							(page_id, line_id) 
+						VALUES 
+							('".$page_id."', '".$sender_userid."')";
+				$result = sql_select_fetchALL($sql);
+			}
+			$json_str = '{
+				"type": "text",
+				"text": "訂閱成功"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		} else {
+			$sql = "DELETE FROM alert_rss_subscribe WHERE line_id = '".$sender_userid."'";
+			sql_select_fetchALL($sql);
+			$sql = "DELETE FROM fb_page_subscribe WHERE line_id = '".$sender_userid."'";
+			sql_select_fetchALL($sql);
+			$json_str = '{
+				"type": "text",
+				"text": "取消訂閱成功"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		}
 	}
 
 	function sql_select_fetchALL($sql){   
