@@ -94,7 +94,7 @@
 	
 	//查看任務
 	function mission($sender_userid, $page){
-		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
+		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."' AND status = 1";
 		$result = sql_select_fetchALL($sql);
 		if($result->num_rows == 0){
 			$json_str = '{
@@ -342,7 +342,7 @@
 	}
 	//操作秘笈
 	function operation($sender_userid){
-		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
+		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."' AND status = 1";
 		$result = sql_select_fetchALL($sql);
 		if($result->num_rows == 0){
 			$json_str = '{

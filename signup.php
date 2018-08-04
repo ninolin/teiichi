@@ -4,18 +4,12 @@
     $name = $_POST['name'];
     $phone = $_POST['phone'];
     
- 
-
     if($type == 'add'){
         $sql = "INSERT INTO line_user 
                 (line_id, name, phone, user_created_date) 
             VALUES 
                 ('".$line_id."', '".$name."', '".$phone."', '".date("Y-m-d")."')";
-        $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
         sql_select_fetchALL($sql);
-	    $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
     } else if($type == 'update'){
         $sql = "UPDATE line_user SET name = '".$name."', phone = '".$phone."' 
                 WHERE line_id = '".$line_id."'";
