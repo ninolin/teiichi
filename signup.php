@@ -1,5 +1,5 @@
 <?php
-    $type = $_POST['type'];
+    $type = $_GET['type'];
     $line_id = $_GET['line_id'];
     $name = $_POST['name'];
     $phone = $_POST['phone'];
