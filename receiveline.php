@@ -199,7 +199,7 @@
 					{
 					  "type": "uri",
 					  "label": "註冊",
-					  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'?type=add"
+					  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'&type=add"
 					}
 				  ],
 				  "title": "歡迎使用本服務",
@@ -259,7 +259,7 @@
 						{
 						  "type": "uri",
 						  "label": "註冊",
-						  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'?type=resignup"
+						  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'&type=resignup"
 						}
 					  ],
 					  "title": "歡迎使用本服務",
