@@ -153,9 +153,11 @@
 						<option value="fb">Facebook</option>
 						<option value="news">新聞</option>
 					</select>
+					
+					<label style="margin-right: 8px;">訊息: </label>
+					<input id="filterTitle" style="margin-right: 8px;" class="form-control" ></input>
+					
 					<label style="margin-right: 8px;">候選人: </label>
-					
-					
 					<input id="filterCandidate" style="margin-right: 8px;" class="form-control" ></input>
 					
 					<button class="btn btn-primary" id="filterQuery">Search</button>

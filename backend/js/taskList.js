@@ -120,6 +120,8 @@ $( document ).ready(function() {
 				page      : page,
 				candidate : $('#filterCandidate').val(),
 				type      : $('#filterOrig').val(),
+				title     : $('#filterTitle').val(),
+				
 			};
 			
 			$.post( "controllers/getTaskList.php",postData,function( data ) {

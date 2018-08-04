@@ -80,14 +80,18 @@
 	
 	$page            = 1;
 	$filterCandidate = '';
+	$filterTitle     = '';
 	
 	if(isset($_POST['page'])){
 		$page = $_POST['page'];
 	}
 	
-	
 	if(!empty($_POST['candidate'])){
 		$filterCandidate = $_POST['candidate'];
+	}
+	
+	if(!empty($_POST['title'])){
+		$filterTitle = $_POST['title'];
 	}
 	
 	
@@ -98,12 +102,16 @@
 		FROM alert_rss_post arp , candidate c 
 		WHERE arp.alert_id = c.alert_id 
 		And c.name like '%" . $filterCandidate ."%'
+		And arp.post_title like '%" . $filterTitle ."%'
 		UNION 
 		SELECT 
 			fp.id, c.name as candidate, fp.post_message as title, fp.post_url as url, fp.post_created_time, fp.post_remark, 'fb' as type, '2' as post_hide 
 		FROM `fb_post` fp, candidate c 
 		WHERE fp.post_status = 1 and fp.page_id = c.page_id	
-		And c.name like '%" . $filterCandidate ."%') as t
+		And c.name like '%" . $filterCandidate ."%'
+		And fp.post_message like '%" . $filterTitle ."%'
+		
+		) as t
 
 		";
 		
@@ -137,13 +145,17 @@
 		FROM alert_rss_post arp , candidate c 
 		WHERE arp.alert_id = c.alert_id 
 		And c.name like '%" . $filterCandidate ."%'
+		And arp.post_title like '%" . $filterTitle ."%'
 		UNION 
 		SELECT 
 			fp.id, c.name as candidate, fp.post_message as title, fp.post_url as url, fp.post_created_time, fp.post_remark, 'fb' as type, '2' as post_hide 
 		FROM `fb_post` fp, candidate c 
 		WHERE fp.post_status = 1 and fp.page_id = c.page_id	
-		And c.name like '%" . $filterCandidate ."%') as t
-
+		And c.name like '%" . $filterCandidate ."%'
+		And fp.post_message like '%" . $filterTitle ."%'
+		
+		) as t
+		
 		";
 		
 		if(!empty($_POST['type'])){
