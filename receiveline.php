@@ -298,22 +298,27 @@
 			return $json;
 		}
 	}
+
 	//查看成就
 	function see_achievement($sender_userid){
+		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+			
+
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."'";
+		fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
 		$signed_count = $result->num_rows;
 		$sql = "SELECT user_created_date FROM line_user WHERE line_id ='".$sender_userid."'";
+		fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-			fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+		
 		if($result->num_rows > 0){
 			$user_created_date = "2018-07-25";
 			foreach($result as $a){
 				$user_created_date = $a['user_created_date'];
 			}
 			$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-			fwrite($myfile, "\xEF\xBB\xBF abc".$$user_created_date); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+			fwrite($myfile, "\xEF\xBB\xBF abc".$user_created_date); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			//expire_date
 			$expire_date = 0;
 			$date1=date_create(date("Y-m-d"));
@@ -340,6 +345,7 @@
 			return $json;
 		}
 	}
+
 	//操作秘笈
 	function operation($sender_userid){
 		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."' AND status = 1";
