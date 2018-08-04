@@ -77,6 +77,13 @@
 			      		see_achievement($sender_userid)
 			    	)
 			);
+		} else if($sender_txt == "訂閱侯選人"){
+			$response = array (
+				"replyToken" => $sender_replyToken,
+				"messages" => array (
+			      		subscribe_candidate($sender_userid)
+			    	)
+			);
 		}
 		
 	}
@@ -384,7 +391,52 @@
 		return $json;
 	}
 	
-	
+	function subscribe_candidate($sender_userid) {
+		$json_str = '{
+				"type": "template",
+				"altText": "this is a carousel template",
+				"template": {
+				"type": "carousel",
+				"columns": []
+				}
+		}';
+		$json = json_decode($json_str);
+		$sql = "SELECT * FROM candidate WHERE type = '2'";
+		$result = sql_select_fetchALL($sql);
+		foreach($result as $a){
+			$sql = "SELECT * 
+					FROM alert_rss_subscribe 
+					WHERE alert_id = '".$a['alert_id']."' AND line_id = '".$sender_userid."'";
+			$result2 = sql_select_fetchALL($sql);
+			if($result->num_rows == 0) {
+				$course_obj = array (
+					"title" => $a['name'],
+					"text" => "歡迎訂閱「".$a['name']."」臉書粉絲團及新聞",
+					"actions" => array (
+						array (
+							"type" => "postback",
+							"label"=> "訂閱",
+				  			"data"=> "sub&".$a['alert_id']
+						)
+					)
+				);
+			} else {
+				$course_obj = array (
+					"title" => $a['name'],
+					"text" => "「".$a['name']."」臉書粉絲團及新聞訂閱中",
+					"actions" => array (
+						array (
+							"type" => "postback",
+							"label"=> "取消訂閱",
+				  			"data"=> "unsub&".$a['alert_id']
+						)
+					)
+				);
+			}
+			$json -> template -> columns[] = $course_obj;
+		}
+	}
+
 	function sql_select_fetchALL($sql){   
 		$db_server = "localhost";
 		$db_name = "teiichi";
