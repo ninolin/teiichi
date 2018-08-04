@@ -238,9 +238,9 @@
 						  "text": "查看成就"
 						},
 						{
-						  "type": "message",
-						  "label": "編輯資料",
-						  "text": "編輯資料"
+							"type": "uri",
+							"label": "註冊",
+							"uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'&type=update"
 						}
 					  ],
 					  "title": "每日簽到",
