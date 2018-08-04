@@ -68,6 +68,8 @@ function send_message($alert_id, $send_message){
     $sql = "SELECT ars.line_id, c.name 
             FROM `alert_rss_subscribe` ars, candidate c 
             WHERE ars.alert_id = c.alert_id AND ars.alert_id = '".$alert_id."'";
+            $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+            fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
     $result = sql_select_fetchALL($sql);
     if($result->num_rows > 0) {
         $candidate_name;
