@@ -10,10 +10,12 @@
             VALUES 
                 ('".$line_id."', '".$name."', '".$phone."', '".date("Y-m-d")."')";
         sql_select_fetchALL($sql);
+        header('Location: signupSuccessful.html');
     } else if($type == 'update'){
         $sql = "UPDATE line_user SET name = '".$name."', phone = '".$phone."' 
                 WHERE line_id = '".$line_id."'";
         sql_select_fetchALL($sql);
+        header('Location: updateSuccessful.html');
     } else {
         $sql = "UPDATE line_user SET 
                     name = '".$name."', 
@@ -22,9 +24,10 @@
                     status = '3' 
                 WHERE line_id = '".$line_id."'";
         sql_select_fetchALL($sql);
+        header('Location: signupSuccessful.html');
     }
 
-	header('Location: signupSuccessful.html');
+	
     
 	function sql_select_fetchALL($sql)
 	{   

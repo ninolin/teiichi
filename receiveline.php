@@ -239,7 +239,7 @@
 						},
 						{
 							"type": "uri",
-							"label": "註冊",
+							"label": "更新資料",
 							"uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'&type=update"
 						}
 					  ],
@@ -258,7 +258,7 @@
 					  "actions": [
 						{
 						  "type": "uri",
-						  "label": "註冊",
+						  "label": "重新註冊",
 						  "uri": "https://sporzfy.com/fb/teiichi/signup.html?line_id='.$sender_userid.'&type=resignup"
 						}
 					  ],
