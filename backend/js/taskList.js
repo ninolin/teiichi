@@ -74,6 +74,7 @@ $( document ).ready(function() {
 				$('#'+findList).find('.editRemarkBtn').show();
 				$('#'+findList).find('.remarkSaveBtn').hide();
 				$('#'+findList).find('.editRemarkInput').hide();
+				$('#'+findList).find('.remarkCancelBtn').hide();
 				
 			});
 			
