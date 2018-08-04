@@ -4,10 +4,10 @@ echo $challenge; //回傳hub.challenge get參數
 
 $json_str = file_get_contents('php://input'); //接收request的body
 $json_obj = json_decode($json_str); //轉成json格式
-
+/*
 $myfile = fopen("log.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 fwrite($myfile, "\xEF\xBB\xBF".$json_str); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-
+*/
 try {
     $f_object = $json_obj->object;
     if($f_object === "page"){
@@ -100,9 +100,6 @@ function send_message($f_page_id, $send_message){
                 )
             )
         );
-
-        $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-        fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 
         $header[] = "Content-Type: application/json";
         //輸入line 的 Channel access token

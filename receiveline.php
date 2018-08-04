@@ -2,7 +2,7 @@
 	$json_str = file_get_contents('php://input'); //接收request的body
 	$json_obj = json_decode($json_str); //轉成json格式
 	
-	$myfile = fopen("log.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+	$myfile = fopen("reciveline_log.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 	fwrite($myfile, "\xEF\xBB\xBF".$json_str); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 	
 	$sender_userid = $json_obj->events[0]->source->userId; //取得訊息發送者的id
@@ -73,6 +73,8 @@
 		}
 		
 	}
+	
+	$myfile = fopen("sendline_log.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 	fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 	$header[] = "Content-Type: application/json";
 	//輸入line 的 Channel access token
@@ -134,14 +136,10 @@
 		$page_end = 5 * $page;
 		$page_start = $page_end - 4;
 		$i = 1;
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$page."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		fwrite($myfile, "\xEF\xBB\xBF".$page_start."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
-		fwrite($myfile, "\xEF\xBB\xBF".$page_end."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		foreach($result as $a){
 			
 			if($i >= $page_start && $i <= $page_end){
-				fwrite($myfile, "\xEF\xBB\xBF".$i); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+				
 				$text = "-";
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
@@ -268,13 +266,9 @@
 	//進行簽到
 	function action_sign($sender_userid){
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."' AND sign_date = '". date("Y-m-d")."'";
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
-		fwrite($myfile, "\xEF\xBB\xBF rr".$result->num_rows);
 		if($result->num_rows == 0){
 			$sql = "INSERT INTO line_user_sign (line_id, sign_date) VALUES ('".$sender_userid."', '".date("Y-m-d")."')";
-			fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			$result = sql_select_fetchALL($sql);
 			$json_str = '{
 				"type": "text",
@@ -294,15 +288,10 @@
 
 	//查看成就
 	function see_achievement($sender_userid){
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-			
-
 		$sql = "SELECT * FROM line_user_sign WHERE line_id ='".$sender_userid."'";
-		fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
 		$signed_count = $result->num_rows;
 		$sql = "SELECT user_created_date FROM line_user WHERE line_id ='".$sender_userid."'";
-		fwrite($myfile, "\xEF\xBB\xBF abc".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
 		
 		if($result->num_rows > 0){
@@ -311,7 +300,6 @@
 				$user_created_date = $a['user_created_date'];
 			}
 
-			fwrite($myfile, "\xEF\xBB\xBF abc".$user_created_date); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 			//expire_date
 			$expire_date = 0;
 			$date1=date_create(date("Y-m-d"));

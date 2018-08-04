@@ -24,8 +24,6 @@
 					VALUES 
 						('".$a['page_id']."', '".$line_id."')";
             sql_select_fetchALL($sql);
-            $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		    fwrite($myfile, "\xEF\xBB\xBF".$sql."</br>"); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
         }
 
         header('Location: signupSuccessful.html');
