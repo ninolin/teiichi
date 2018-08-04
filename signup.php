@@ -12,17 +12,18 @@
         sql_select_fetchALL($sql);
 
         $sql = "SELECT * FROM candidate WHERE type = 1";
+        $result = sql_select_fetchALL($sql);
         foreach($result as $a){
             $sql = "INSERT INTO alert_rss_subscribe 
 						(alert_id, line_id) 
 					VALUES 
 						('".$a['alert_id']."', '".$line_id."')";
-			$result = sql_select_fetchALL($sql);
+			sql_select_fetchALL($sql);
 			$sql = "INSERT INTO fb_page_subscribe 
 						(page_id, line_id) 
 					VALUES 
 						('".$a['page_id']."', '".$line_id."')";
-			$result = sql_select_fetchALL($sql);
+			sql_select_fetchALL($sql);
         }
 
         header('Location: signupSuccessful.html');

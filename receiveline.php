@@ -433,12 +433,12 @@
 							(alert_id, line_id) 
 						VALUES 
 							('".$alert_id."', '".$sender_userid."')";
-				$result = sql_select_fetchALL($sql);
+				sql_select_fetchALL($sql);
 				$sql = "INSERT INTO fb_page_subscribe 
 							(page_id, line_id) 
 						VALUES 
 							('".$page_id."', '".$sender_userid."')";
-				$result = sql_select_fetchALL($sql);
+				sql_select_fetchALL($sql);
 			}
 			$json_str = '{
 				"type": "text",
