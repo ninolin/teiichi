@@ -55,12 +55,56 @@ foreach($result as $a){
                     VALUES 
                     ('".$alert_id."', '".$id."', '".$link."', '".($date->getTimestamp())."', '".$title."')";
                 sql_select_fetchALL($sql);
+                send_message($alert_id, $link);
             }
             $link = "";
             $time = "";
             $id = "";
         }
     }
+}
+
+function send_message($alert_id, $send_message){
+    $sql = "SELECT ars.line_id, c.name 
+            FROM `alert_rss_subscribe` ars, candidate c 
+            WHERE ars.alert_id = c.alert_id AND ars.alert_id = '".$alert_id."'";
+    $result = sql_select_fetchALL($sql);
+    if($result->num_rows > 0) {
+        $candidate_name;
+        $user_list = array();
+        foreach($result as $a){
+            $candidate_name = $a['name'];
+            array_push($user_list,  $a['line_id']);
+        }
+        $response = array (
+            "to" => $user_list,
+            "messages" => array (
+                array (
+                    "type" => "text",
+                    "text" => $candidate_name."有新貼文囉!!"
+                ),
+                array (
+                    "type" => "text",
+                    "text" => $send_message
+                )
+            )
+        );
+
+        $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
+        fwrite($myfile, "\xEF\xBB\xBF".json_encode($response)); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
+
+        $header[] = "Content-Type: application/json";
+        //輸入line 的 Channel access token
+        $header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
+        $ch = curl_init("https://api.line.me/v2/bot/message/multicast");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);                                                                                                   
+        $result = curl_exec($ch);
+        curl_close($ch);
+    }
+    
 }
 
 function sql_select_fetchALL($sql){   
