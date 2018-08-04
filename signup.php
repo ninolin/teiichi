@@ -10,7 +10,7 @@
         $sql = "INSERT INTO line_user 
                 (line_id, name, phone, user_created_date) 
             VALUES 
-                ('".$line_id."', '".$name."', '".$phone."', ".date("Y-m-d").")";
+                ('".$line_id."', '".$name."', '".$phone."', '".date("Y-m-d")."')";
         $myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
 		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
         sql_select_fetchALL($sql);
