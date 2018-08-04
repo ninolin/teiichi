@@ -10,12 +10,29 @@
             VALUES 
                 ('".$line_id."', '".$name."', '".$phone."', '".date("Y-m-d")."')";
         sql_select_fetchALL($sql);
+
+        $sql = "SELECT * FROM candidate WHERE type = 1";
+        foreach($result as $a){
+            $sql = "INSERT INTO alert_rss_subscribe 
+						(alert_id, line_id) 
+					VALUES 
+						('".$a['alert_id']."', '".$line_id."')";
+			$result = sql_select_fetchALL($sql);
+			$sql = "INSERT INTO fb_page_subscribe 
+						(page_id, line_id) 
+					VALUES 
+						('".$a['page_id']."', '".$line_id."')";
+			$result = sql_select_fetchALL($sql);
+        }
+
         header('Location: signupSuccessful.html');
+
     } else if($type == 'update'){
         $sql = "UPDATE line_user SET name = '".$name."', phone = '".$phone."' 
                 WHERE line_id = '".$line_id."'";
         sql_select_fetchALL($sql);
         header('Location: updateSuccessful.html');
+
     } else {
         $sql = "UPDATE line_user SET 
                     name = '".$name."', 
@@ -25,10 +42,9 @@
                 WHERE line_id = '".$line_id."'";
         sql_select_fetchALL($sql);
         header('Location: signupSuccessful.html');
+
     }
 
-	
-    
 	function sql_select_fetchALL($sql)
 	{   
 		$db_server = "localhost";
