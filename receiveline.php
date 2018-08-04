@@ -435,6 +435,7 @@
 			}
 			$json -> template -> columns[] = $course_obj;
 		}
+		return $json;
 	}
 
 	function sql_select_fetchALL($sql){   
