@@ -94,6 +94,17 @@
 	
 	//查看任務
 	function mission($sender_userid, $page){
+		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
+		$result = sql_select_fetchALL($sql);
+		if($result->num_rows == 0){
+			$json_str = '{
+				"type": "text",
+				"text": "請先註冊並審核後才可以使用此服務"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		}
+
 		$json_str = '{
   			"type": "template",
   			"altText": "this is a carousel template",
@@ -177,8 +188,6 @@
 	//每日簽到
 	function sign($sender_userid){
 		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
-		$myfile = fopen("log2.txt", "w+") or die("Unable to open file!"); //設定一個log.txt來印訊息
-		fwrite($myfile, "\xEF\xBB\xBF".$sql); //在字串前面加上\xEF\xBB\xBF轉成utf8格式
 		$result = sql_select_fetchALL($sql);
 		if($result->num_rows == 0){
 			$json_str = '{
@@ -333,6 +342,17 @@
 	}
 	//操作秘笈
 	function operation($sender_userid){
+		$sql = "SELECT * FROM line_user WHERE line_id ='".$sender_userid."'";
+		$result = sql_select_fetchALL($sql);
+		if($result->num_rows == 0){
+			$json_str = '{
+				"type": "text",
+				"text": "請先註冊並審核後才可以使用此服務"
+			}';
+			$json = json_decode($json_str);
+			return $json;
+		}
+		
 		$json_str = '{
 			"type": "template",
 			"altText": "this is a buttons template",
