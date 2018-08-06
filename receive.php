@@ -103,8 +103,8 @@ function send_message($f_page_id, $send_message){
 
         $header[] = "Content-Type: application/json";
         //輸入line 的 Channel access token
-        $header[] = "Authorization: Bearer HJbK1gpGuMd1ZHEgUjVlo8U0PXoe8tuXUy3EN+FONnbQ8lHZAWgbpVcZPKs12a6o1C5tu9Ym1hdKUApJa8sNb1KeXMgjEax7hMascOKrFsNfMciHKCNIsptA6eSPLIFUgaDt8UFoQ0Ldgj7fRs2vHgdB04t89/1O/w1cDnyilFU=";
-        $ch = curl_init("https://api.line.me/v2/bot/message/multicast");
+        $header[] = "Authorization: Bearer GslnfrzfEI86+MXtSdGs7CWhK5MadTwFsT8lqTSeIpPoHgZQNEiEnJ4tYrGu8aqDIRN3JXE3iqMRPO1KAZHsngbph6uxehe4+ESda044izNQ8DeIA+rabzzg9wj5BmvUHfPJ/roQs9K7f/GkgJCufAdB04t89/1O/w1cDnyilFU=";
+	    $ch = curl_init("https://api.line.me/v2/bot/message/multicast");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));                                                                  
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
