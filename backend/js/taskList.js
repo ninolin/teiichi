@@ -155,8 +155,12 @@ $( document ).ready(function() {
 						
 					element['postHideSelect'] = '<select class="form-control postHideSelect" style="padding: 0">' + showOption + hideOption +'</select>';
 						
-				
-					element['typeText'] = (element['type'] == 'news' ) ? "新聞" : "臉書";
+	
+					element['isUrlShow'] = "";
+					if(element['url'] == "-"){
+						element['isUrlShow'] = "display:none";
+ 					}
+					element['typeText'] = (element['type'] == 'news' ) ? "新聞" : (element['type'] == 'fb' ) ? "臉書" : "";
 					element['listId']   = 'list_' + type + "_" + id;
 					return element;
 				});

@@ -120,10 +120,12 @@
 	$type       = $_POST['type'];
 	$updateVale = $_POST['updateVale'];
 	
-	
 	if($type == 'news'){
 		$sql    = "UPDATE alert_rss_post SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
-	}else{
+	} else if ($type == 'custom'){
+		$sql    = "UPDATE cus_post SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
+	}
+	 else {
 		$sql    = "UPDATE fb_post SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
 	}
 	

@@ -110,11 +110,16 @@
 		WHERE fp.post_status = 1 and fp.page_id = c.page_id	
 		And c.name like '%" . $filterCandidate ."%'
 		And fp.post_message like '%" . $filterTitle ."%'
-		
+		UNION
+		SELECT 
+			id, '-' as candidate, post_title as title, '-' as url, 9999999999 as post_created_time, post_remark, 'custom' as type, post_hide 
+		FROM cus_post 
+		WHERE post_title like '%" . $filterTitle ."%' 
 		) as t
 
 		";
-		
+		// echo $sql;
+		// return;
 		if(!empty($_POST['type'])){
 			$sql = $sql . " WHERE type ='" . $_POST['type'] ."'";
 		}
@@ -153,11 +158,14 @@
 		WHERE fp.post_status = 1 and fp.page_id = c.page_id	
 		And c.name like '%" . $filterCandidate ."%'
 		And fp.post_message like '%" . $filterTitle ."%'
-		
-		) as t
-		
+		UNION
+		SELECT id, '-' as candidate, post_title as title, '-' as url, 9999999999 as post_created_time, post_remark, 'custom' as type, post_hide 
+		FROM cus_post 
+		WHERE post_title like '%" . $filterTitle ."%' 
+		) as t ORDER BY post_created_time DESC
 		";
-		
+		// echo $sql;
+		// return;
 		if(!empty($_POST['type'])){
 			$sql = $sql . " WHERE type ='" . $_POST['type'] ."'";
 		}
@@ -180,7 +188,7 @@
 			'type'              => $row['type'],
 			'url'               => $row['url'],
 			'postRemark'        => $row['post_remark'],
-			'post_created_time' => date('Y/m/d H:i:s', $row['post_created_time']),
+			'post_created_time' => $row['post_created_time'] != 9999999999 ? date('Y/m/d H:i:s', $row['post_created_time']) : '-',
 			'post_hide'         => $row['post_hide'],
 		];
 		

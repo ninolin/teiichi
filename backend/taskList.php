@@ -200,7 +200,7 @@
 		<td><span data-content="typeText" ></span></td>
 		<td><span class="ellipsis"  data-content="title" data-template-bind='[{"attribute": "title", "value": "title"}]'></span></td>
 		<td>
-			<a class="btn btn-light" data-href="url" target="_blank"><i class="fas fa-link"></i></a><span data-content=""></span>
+			<a class="btn btn-light" data-href="url" target="_blank"  data-template-bind='[{"attribute": "style", "value": "isUrlShow"}]'><i class="fas fa-link"></i></a><span data-content=""></span>
 		</td>
 		<td><span data-content="candidate"></span></td>
 		<td>
