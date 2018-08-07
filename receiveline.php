@@ -158,7 +158,7 @@
 							array (
 								"type" => "message",
 								"label" => "-",
-								"text" => "-"
+								"data" => "-"
 							)
 						)
 					);
