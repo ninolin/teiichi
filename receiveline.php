@@ -150,17 +150,32 @@
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
 				}
-				$course_obj = array (
-					"title" => $a['title'],
-					"text" => $text,
-					"actions" => array (
-						array (
-							"type" => "uri",
-							"label" => "連結".$a['type'],
-							"uri" => $a['url']
+				if($a['url'] == "-"){
+					$course_obj = array (
+						"title" => $a['title'],
+						"text" => $text,
+						"actions" => array (
+							array (
+								"type" => "message",
+								"label" => "-",
+								"text" => "-"
+							)
 						)
-					)
-				);
+					);
+				} else {
+					$course_obj = array (
+						"title" => $a['title'],
+						"text" => $text,
+						"actions" => array (
+							array (
+								"type" => "uri",
+								"label" => "連結".$a['type'],
+								"uri" => $a['url']
+							)
+						)
+					);
+				}
+				
 				$json -> template -> columns[] = $course_obj;
 			}
 			if($i == ($page_end+1)){
