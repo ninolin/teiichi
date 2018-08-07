@@ -156,7 +156,7 @@
 						"text" => $text,
 						"actions" => array (
 							array (
-								"type" => "message",
+								"type" => "postback",
 								"label" => "-",
 								"data" => "-"
 							)
