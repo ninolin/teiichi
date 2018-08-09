@@ -150,6 +150,9 @@
 				if(!is_null($a['post_remark'])){
 					$text = $a['post_remark'];
 				}
+				if(mb_strlen($a['title']) >= 35){
+					$a['title'] = mb_substr($a['title'], 0, 35, "utf-8");
+				}
 				if($a['url'] == "-"){
 					$course_obj = array (
 						"title" => $a['title'],

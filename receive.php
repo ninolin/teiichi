@@ -34,7 +34,7 @@ try {
         }
         if($f_comment_id == "" && $f_page_from_id == $f_page_id){
             //新增/修改/刪除貼文
-            if($f_verb == 'add'){
+            if($f_verb == 'add' && $f_message != ''){
                 $post_url = "https://www.facebook.com/permalink.php?story_fbid=".explode('_',$f_post_id)[1]."&id=".$f_page_id;
                 $sql = "INSERT INTO fb_post (page_id, post_id, post_created_time, post_message, post_url, lastest_update_time) 
                         VALUES ('".$f_page_id."', '".$f_post_id."', '".$f_created_time."', '".$f_message."', '".$post_url."', '".$f_created_time."')";
