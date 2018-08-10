@@ -24,7 +24,7 @@
                     <input type="checkbox" checked="checked" id="policy_check">
                     您同意 <a href="policy.html">個資蒐集前告知函</a>
                 </h3>
-                <div id="error_note"></div>
+                <div id="error_note" style="color: red"></div>
                 <div class="form-row form-last-row">
                     <!--<button id="signup-btn" type="submit">註冊</button>-->
                     <button id="signup-btn" type="button" onclick="check()">註冊</button>
@@ -60,15 +60,15 @@
     }
 
     function check(){
-        console.log("aaa");
-        if(document.getElementById("name") == ""){
+        if(document.getElementById("name").value == ""){
             document.getElementById("error_note").innerHTML = "請輸入姓名";
-        } else if(document.getElementById("name") == "") {
+        } else if(document.getElementById("phone").value == "") {
             document.getElementById("error_note").innerHTML = "請輸入電話";
-        } else if(document.getElementById("policy_check") == ""){
+        } else if(!document.getElementById("policy_check").checked){
             document.getElementById("error_note").innerHTML = "請同意個人資料蒐集告知函";
         } else {
-
+            document.getElementById("error_note").innerHTML = "";
+            document.getElementById("data-form").submit();
         }
     }
 </script>
