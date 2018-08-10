@@ -132,7 +132,7 @@
 						)
 					UNION
 					SELECT 
-						post_title as title, post_url as url, 9999999999 as lastest_time, post_remark, 'custom' as type  
+						post_title as title, post_url as url, 9999999999 as lastest_time, post_remark, '' as type  
 						FROM cus_post
 						WHERE post_hide = 2
 					) as post 
