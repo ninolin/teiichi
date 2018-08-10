@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set("Asia/Taipei");
+
 $challenge = $_REQUEST["hub_challenge"]; //取得fb webhook的hub.challenge get參數
 echo $challenge; //回傳hub.challenge get參數
 

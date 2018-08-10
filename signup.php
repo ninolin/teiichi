@@ -1,4 +1,6 @@
 <?php
+    date_default_timezone_set("Asia/Taipei");
+    
     $type = $_GET['type'];
     $line_id = $_GET['line_id'];
     $name = $_POST['name'];

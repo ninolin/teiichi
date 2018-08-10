@@ -1,6 +1,6 @@
 
 <?php
-
+date_default_timezone_set("Asia/Taipei");
 header('Content-Type:text/html;charset= UTF-8');
 
 $sql = "SELECT * FROM alert_rss";
