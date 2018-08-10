@@ -123,12 +123,24 @@
 	if($type == 'news'){
 		$sql    = "UPDATE alert_rss_post SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
 	} else if ($type == 'custom'){
-		$sql    = "UPDATE cus_post SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
+		
+		$editTopMessage = '';
+		$editTopUrl     = '';
+		
+		if(isset($_POST['editTopMessage'])){
+			$editTopMessage = $_POST['editTopMessage'];
+		}
+		
+		if(isset($_POST['editTopUrl'])){
+			$editTopUrl = $_POST['editTopUrl'];
+		}
+		
+		$sql    = "UPDATE cus_post SET post_title='". $editTopMessage ."' , post_url='". $editTopUrl ."' , post_remark='". $updateVale ."'  WHERE id  ='". $typeId ."'";
 	}
 	 else {
-		$sql    = "UPDATE fb_post SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
+		$sql    = "UPDATE fb_post SET SET post_remark='". $updateVale ."' WHERE id  ='". $typeId ."'";
 	}
-	
+
 	$result = sqlSelect($sql,$dbConfig);
 
 	if ($result === TRUE) {
@@ -139,7 +151,8 @@
 				'response' => [
 					'data'     => []
 				],
-				'error'    => ''
+				'error'    => '',
+				'sql'      => $sql,
 			
 			)
 		);	

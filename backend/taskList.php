@@ -15,15 +15,16 @@
 
 	<script src="js/lib/jquery-3.3.1.min.js"></script>
 	<script src="js/lib/jquery.bootpag.min.js"></script>
-	
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+	<!-- <script src="https://getbootstrap.com/docs/4.1/dist/js/bootstrap.min.js"></script> -->
 	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">-->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 	
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script src="js/lib/jquery.loadTemplate.js"></script>
 	<script src="js/taskList.js"></script>
-
+	
 	<style>
 		.nav {
 			padding: 15px;
@@ -133,7 +134,7 @@
 			
 				<div class="row">
 					<div class="col-md-8 nav">
-						<a href="taskList.php" class="btn btn-light" ><i class="fas fa-arrow-alt-circle-left"></i> 任務清單</a>
+						<!-- <a href="taskList.php" class="btn btn-light" ><i class="fas fa-arrow-alt-circle-left"></i> 任務清單</a> -->
 						<a href="userList.php" class="btn btn-light" ><i class="fas fa-arrow-alt-circle-left"></i> 用戶清單</a>
 					</div>
 					<div class="col-md-4" style="padding: 15px;">
@@ -188,9 +189,46 @@
 			<div class="col-md-1"></div>
 		</div>
 	</div>
-	<div id="loaderMask" class="hideView">
+	<!--<div id="loaderMask" class="hideView">
 		<div id="loader"></div>
+	</div>-->
+	
+	<!-- Modal -->
+	<div class="modal fade" id="editTopModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+				
+					<div class="modal-body">
+							<div class="" style="padding-bottom: 20px;">
+								<div>置頂訊息:</div>
+								<input id="editTopMessage" class="form-control" />
+								<input id="editTopTypeID" type="hidden"/>
+							</div>
+							<div class=" hideElement" style="padding-bottom: 20px">
+								<div>URL:</div>
+								<input id="editTopUrl" class="form-control" />
+							</div>
+							<div class=" hideElement" style="padding-bottom: 20px">
+								<div>補充訊息:</div>
+								<input id="editTopOhterMessage" class="form-control" />
+							</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="saveTopEdit">更新</button>
+				</div>
+			</div>
+		</div>
 	</div>
+
   </body>
 </html>
 
@@ -198,19 +236,18 @@
 	<tr data-id="listId">
 		<td><span data-content="index"></span></td>
 		<td><span data-content="typeText" ></span></td>
-		<td><span class="ellipsis"  data-content="title" data-template-bind='[{"attribute": "title", "value": "title"}]'></span></td>
+		<td><span class="ellipsis postMessage"  data-content="title" data-template-bind='[{"attribute": "title", "value": "title"}]'></span></td>
 		<td>
-			<a class="btn btn-light" data-href="url" target="_blank"  data-template-bind='[{"attribute": "style", "value": "isUrlShow"}]'><i class="fas fa-link"></i></a><span data-content=""></span>
+			<a class="btn btn-light postUrl" data-href="url" target="_blank"  data-template-bind='[{"attribute": "style", "value": "isUrlShow"}]'><i class="fas fa-link"></i></a><span data-content=""></span>
 		</td>
 		<td><span data-content="candidate"></span></td>
 		<td>
 			<div style="white-space: nowrap;">
 				<span class="ellipsis postRemarkText" data-content="postRemark" data-template-bind='[{"attribute": "title", "value": "postRemark"}]'></span>
 				<input  style="width:250px" class="form-control hideView editRemarkInput" data-value="postRemark" data-template-bind='[{"attribute": "data-type", "value": "type"},{"attribute": "data-type_id", "value": "id"}]'></input>
+				<span data-content="editView">
 				
-				<button class="btn btn-light editRemarkBtn"><i class="fas fa-edit"></i></button >
-				<button class="btn btn-danger hideView remarkSaveBtn" ><i class="fas fa-check-circle"></i></button >
-				<button class="btn btn-secondary hideView remarkCancelBtn" ><i class="fas fa-times"></i></button >
+				</span>
 			</div>
 		</td>
 		<td style="text-align:right"><span data-content="post_created_time"></span></td>

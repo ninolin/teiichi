@@ -159,7 +159,7 @@
 		And c.name like '%" . $filterCandidate ."%'
 		And fp.post_message like '%" . $filterTitle ."%'
 		UNION
-		SELECT id, '-' as candidate, post_title as title, '-' as url, 9999999999 as post_created_time, post_remark, 'custom' as type, post_hide 
+		SELECT id, '-' as candidate, post_title as title, post_url as url, 9999999999 as post_created_time, post_remark, 'custom' as type, post_hide 
 		FROM cus_post 
 		WHERE post_title like '%" . $filterTitle ."%' 
 		) as t ORDER BY post_created_time DESC

@@ -6,6 +6,38 @@ $( document ).ready(function() {
 			getTaskList(1);
 		});
 		
+		$(document).on("click",".editTopBtn",function() {
+			
+			var editTopMessage      = $(this).parent().parent().parent().parent().find('.postMessage').text();
+			var editTopUrl          = $(this).parent().parent().parent().parent().find('.postUrl').attr('href');
+			var editTopOhterMessage = $(this).parent().parent().find('.postRemarkText').text();
+			var editTopTypeID       = $(this).parent().parent().find('.editRemarkInput').data('type_id');
+				
+			$('#editTopMessage').val(editTopMessage);
+			$('#editTopUrl').val(editTopUrl);
+			$('#editTopOhterMessage').val(editTopOhterMessage);
+			$('#editTopTypeID').val(editTopTypeID);
+			
+			$('#editTopModal').modal('show');
+		});
+		
+		
+		$(document).on("click","#saveTopEdit",function() {
+			
+
+			var postData = {
+				typeId         : $('#editTopTypeID').val(),
+				type           : 'custom',
+				editTopMessage : $('#editTopMessage').val(),
+				editTopUrl     : $('#editTopUrl').val(),
+				updateVale     : $('#editTopOhterMessage').val(),
+ 			};
+			
+			updateRemark(postData);
+			
+			
+		});
+		
 		$(document).on("change",".postHideSelect",function() {
 			
 			var postData = {
@@ -20,9 +52,12 @@ $( document ).ready(function() {
 		
 		$(document).on("click",".editRemarkBtn",function() {
 			
-			$(this).parent().find('span').hide();
+			$(this).parent().parent().find('.postRemarkText').hide();
+			$(this).parent().parent().find('.editRemarkInput').show();
+			
+			
 			$(this).parent().find('.editRemarkBtn').hide();
-			$(this).parent().find('.editRemarkInput').show();
+			
 			$(this).parent().find('.remarkSaveBtn').show();
 			$(this).parent().find('.remarkCancelBtn').show();
 			
@@ -31,28 +66,31 @@ $( document ).ready(function() {
 		$(document).on("click",".remarkSaveBtn",function() {
 			
 			var postData = {
-				typeId     : $(this).parent().find('.editRemarkInput').data('type_id'),
-				type       : $(this).parent().find('.editRemarkInput').data('type'),
-				updateVale : $(this).parent().find('.editRemarkInput').val(),
+				typeId     : $(this).parent().parent().find('.editRemarkInput').data('type_id'),
+				type       : $(this).parent().parent().find('.editRemarkInput').data('type'),
+				updateVale : $(this).parent().parent().find('.editRemarkInput').val(),
  			};
 			
 			updateRemark(postData);
 		});
 		
 		$(document).on("click",".remarkCancelBtn",function() {
-			$(this).parent().find('.postRemarkText').show();
+			$(this).parent().parent().find('.postRemarkText').show();
+			$(this).parent().parent().find('.editRemarkInput').hide();
+			
 			$(this).parent().find('.editRemarkBtn').show();
 			$(this).parent().find('.remarkSaveBtn').hide();
-			$(this).parent().find('.editRemarkInput').hide();
+			
 			$(this).parent().find('.remarkCancelBtn').hide();
 			
-			var origText = $(this).parent().find('.postRemarkText').text();
-			$(this).parent().find('.editRemarkInput').val(origText);
+			var origText = $(this).parent().parent().find('.postRemarkText').text();
+			$(this).parent().parent().find('.editRemarkInput').val(origText);
 		});
 		
 	
 		const updateRemark = (postData)=> {
 			
+			console.log(postData);
 			$.post( "controllers/updateRemark.php",postData,function( data ) {
 	
 				var result = jQuery.parseJSON(data);
@@ -63,6 +101,10 @@ $( document ).ready(function() {
 					return;
 				}
 				
+				if(postData.type = 'custom'){
+					location.reload();
+				}
+			
 				var data = result.response.data;
 				
 				var findList = 'list_' + postData.type + "_" + postData.typeId;
@@ -154,14 +196,23 @@ $( document ).ready(function() {
 					var hideOption = '<option value="2" ' +isHide+'>顯示</option>';
 						
 					element['postHideSelect'] = '<select class="form-control postHideSelect" style="padding: 0">' + showOption + hideOption +'</select>';
-						
 	
 					element['isUrlShow'] = "";
-					if(element['url'] == "-"){
+		
+					if(element['url'] == ""){
 						element['isUrlShow'] = "display:none";
  					}
-					element['typeText'] = (element['type'] == 'news' ) ? "新聞" : (element['type'] == 'fb' ) ? "臉書" : "";
+					element['typeText'] = (element['type'] == 'news' ) ? "新聞" : (element['type'] == 'fb' ) ? "臉書" : "置頂";
 					element['listId']   = 'list_' + type + "_" + id;
+					
+					
+					element['editView'] = '<button class="btn btn-light editRemarkBtn"><i class="fas fa-edit"></i></button ><button class="btn btn-danger hideView remarkSaveBtn" ><i class="fas fa-check-circle"></i></button ><button class="btn btn-secondary hideView remarkCancelBtn" ><i class="fas fa-times"></i></button >';
+					
+					
+					if(element['type'] == 'custom'){
+						element['editView'] = '<button class="btn btn-light editTopBtn"><i class="fas fa-edit"></i></button >';
+					}
+					
 					return element;
 				});
 				
