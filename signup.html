@@ -15,17 +15,18 @@
             <form class="form-mini" method="post" id="data-form" action="signup.php">
                 <h2 id="h2tag">基本資料填寫並通過審核後即可開始使用本服務</h2>
                 <div class="form-row">
-                    <input type="text" name="name" placeholder="姓名">
+                    <input type="text" name="name" id="name" placeholder="姓名">
                 </div>
                 <div class="form-row">
-                    <input type="text" name="phone" placeholder="電話">
+                    <input type="text" name="phone" id="phone" placeholder="電話">
                 </div>
                 <h3 id="h3tag">
-                    <input type="checkbox" checked="checked">
+                    <input type="checkbox" checked="checked" id="policy_check">
                     您同意 <a href="policy.html">個資蒐集前告知函</a>
                 </h3>
                 <div class="form-row form-last-row">
-                    <button id="signup-btn" type="submit">註冊</button>
+                    <!--<button id="signup-btn" type="submit">註冊</button>-->
+                    <button id="signup-btn" type="button" onclick="check()">註冊</button>
                 </div>
             </form>
         </div>
@@ -54,6 +55,18 @@
         } else if(aryPara['type'] == 'resignup') {
             document.getElementById("h1tag").innerHTML = "重新註冊";
             document.getElementById("signup-btn").innerHTML = "重新註冊";
+        }
+    }
+
+    function check(){
+        if(document.getElementById("name") == ""){
+            alert("請輸入姓名");
+        } else if(document.getElementById("name") == "") {
+            alert("請輸入電話");
+        } else if(document.getElementById("policy_check") == ""){
+            alert("請同意個人資料蒐集告知函");
+        } else {
+            
         }
     }
 </script>
