@@ -64,7 +64,7 @@
             document.getElementById("error_note").innerHTML = "請輸入姓名";
         } else if(document.getElementById("phone").value == "") {
             document.getElementById("error_note").innerHTML = "請輸入電話";
-        } else if(!document.getElementById("policy_check").checked){
+        } else if(!document.getElementById("policy_check").checked && aryPara['type'] != 'update'){
             document.getElementById("error_note").innerHTML = "請同意個人資料蒐集告知函";
         } else {
             document.getElementById("error_note").innerHTML = "";
