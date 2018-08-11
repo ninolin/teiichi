@@ -158,6 +158,9 @@
 								<th scope="col"></th>
 								<th scope="col">姓名</th>
 								<th scope="col">電話</th>
+								<th scope="col">註冊日</th>
+								<th scope="col">簽到數</th>
+								<th scope="col">簽到率</th>
 								<th scope="col">狀態</th>
 								<th scope="col" style="text-align:right">操作</th>
 							</tr>
@@ -184,6 +187,9 @@
 		<td><span data-content="index"></span></td>
 		<td><span data-content="userName"></span></td>
 		<td><span data-content="userPhone"></span></td>
+		<td><span data-content="userCreatedDate"></span></td>
+		<td><span data-content="userSignCount"></span></td>
+		<td><span data-content="userSignRate"></span></td>
 		<td><span data-content="statusText" class="statusText"></span></td>
 		<td style="text-align:right">
 			<div class="operate" data-content="operate"><div>

@@ -1,5 +1,5 @@
 <?php
-
+	date_default_timezone_set("Asia/Taipei");
 	session_start();
 	
 	function _getUserStatus($status = ''){
@@ -131,21 +131,37 @@
 	$resultData  = [];
 	$resultCount = 1;
 	while($row = $result->fetch_assoc()) {
-		
+		$sql = "SELECT count(*) as total FROM line_user_sign WHERE line_id = '".$row['line_id']."'";
+		$resultSignCount = sqlSelect($sql,$dbConfig);
+		$total = 0;
+		while($rowSignCount = $resultSignCount->fetch_assoc()) {
+			$total = $rowSignCount['total'];
+		}
+		$joinDate = 1;
+		$date1=date_create($row['user_created_date']);
+		$date2=date_create(date("Y-m-d"));
+		$diff=date_diff($date1,$date2);
+		if($diff->format("%R") == "+"){
+			$joinDate = $diff->format("%a")+1;
+		}
+		$signRate = round($total/$joinDate*100);
 		$value = [
-			'index'      => (( $pageInfo['pageIndex'] -1) * $pageInfo['pageCount']) + $resultCount,
-			'userId'     => $row['id'],
-			'userName'   => $row['name'],
-			'userPhone'  => $row['phone'],
-			'userStatus' => $row['status'],
-			'statusText' => _getUserStatus($row['status']),
+			'index'      	  => (( $pageInfo['pageIndex'] -1) * $pageInfo['pageCount']) + $resultCount,
+			'userId'     	  => $row['id'],
+			'userName'   	  => $row['name'],
+			'userPhone'  	  => $row['phone'],
+			'userStatus' 	  => $row['status'],
+			'userCreatedDate' => $row['user_created_date'],
+			'userSignCount'	  => $total,
+			'userSignRate'	  => $signRate."%",
+			'statusText' 	  => _getUserStatus($row['status']),
 		];
-		
+		//print_r($value);
 		array_push($resultData, $value);
 		
 		$resultCount = $resultCount+1;
     }
-
+	
 	
 	echo json_encode (
 			array (
