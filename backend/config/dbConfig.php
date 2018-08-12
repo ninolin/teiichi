@@ -3,6 +3,7 @@
 return array(
 	
 	
+		
 		'ip'       => 'localhost',
 		'port'     => '3306',
 		'account'  => 'root',
@@ -13,7 +14,7 @@ return array(
 		'port'     => '3306',
 		'account'  => 'root',
 		'password' => '',
-		'DBname'   => 'teiichi',*ㄥ
+		'DBname'   => 'teiichi',*/
 
 );
 
