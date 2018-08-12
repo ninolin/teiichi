@@ -135,7 +135,7 @@
 						post_title as title, post_url as url, 9999999999 as lastest_time, post_remark, '' as type  
 						FROM cus_post
 						WHERE post_hide = 2
-					) as post 
+					) as post WHERE title != ''
 				ORDER BY lastest_time DESC
 				";
 		$result = sql_select_fetchALL($sql);
