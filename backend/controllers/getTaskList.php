@@ -105,7 +105,7 @@
 		And arp.post_title like '%" . $filterTitle ."%'
 		UNION 
 		SELECT 
-			fp.id, c.name as candidate, fp.post_message as title, fp.post_url as url, fp.post_created_time, fp.post_remark, 'fb' as type, '2' as post_hide 
+			fp.id, c.name as candidate, fp.post_message as title, fp.post_url as url, fp.post_created_time, fp.post_remark, 'fb' as type, post_hide 
 		FROM `fb_post` fp, candidate c 
 		WHERE fp.post_status = 1 and fp.page_id = c.page_id	
 		And c.name like '%" . $filterCandidate ."%'

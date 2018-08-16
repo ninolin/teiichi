@@ -129,8 +129,9 @@
 							SELECT page_id 
 							FROM `fb_page_subscribe` 
 							WHERE line_id = '".$sender_userid."'
-						)
-					UNION
+						) 
+						AND post_hide = 2 
+					UNION 
 					SELECT 
 						post_title as title, post_url as url, 9999999999 as lastest_time, post_remark, '' as type  
 						FROM cus_post
