@@ -130,7 +130,7 @@
 							FROM `fb_page_subscribe` 
 							WHERE line_id = '".$sender_userid."'
 						) 
-						AND post_hide = 2 
+						AND post_hide = 2 AND post_status = 1 
 					UNION 
 					SELECT 
 						post_title as title, post_url as url, 9999999999 as lastest_time, post_remark, '' as type  
