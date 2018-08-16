@@ -5,12 +5,13 @@
     $line_id = $_GET['line_id'];
     $name = $_POST['name'];
     $phone = $_POST['phone'];
-    
+    $address = $_POST['address'];
+
     if($type == 'add'){
         $sql = "INSERT INTO line_user 
-                (line_id, name, phone, user_created_date) 
+                (line_id, name, phone, address, user_created_date) 
             VALUES 
-                ('".$line_id."', '".$name."', '".$phone."', '".date("Y-m-d")."')";
+                ('".$line_id."', '".$name."', '".$address."', '".$phone."', '".date("Y-m-d")."')";
         sql_select_fetchALL($sql);
 
         $sql = "SELECT * FROM candidate WHERE type = 1";
@@ -31,7 +32,7 @@
         header('Location: signupSuccessful.html');
 
     } else if($type == 'update'){
-        $sql = "UPDATE line_user SET name = '".$name."', phone = '".$phone."' 
+        $sql = "UPDATE line_user SET name = '".$name."', phone = '".$phone."', address = '".$address."' 
                 WHERE line_id = '".$line_id."'";
         sql_select_fetchALL($sql);
         header('Location: updateSuccessful.html');
@@ -40,6 +41,7 @@
         $sql = "UPDATE line_user SET 
                     name = '".$name."', 
                     phone = '".$phone."', 
+                    address = '".$address."', 
                     user_created_date = '".date("Y-m-d")."',
                     status = '3' 
                 WHERE line_id = '".$line_id."'";

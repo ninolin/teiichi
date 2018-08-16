@@ -20,6 +20,9 @@
                 <div class="form-row">
                     <input type="text" name="phone" id="phone" placeholder="電話">
                 </div>
+                <div class="form-row">
+                    <input type="text" name="address" id="address" placeholder="地址">
+                </div>
                 <h3 id="h3tag">
                     <input type="checkbox" id="policy_check">
                     您同意 <a href="policy.html">個資蒐集前告知函</a>
@@ -64,6 +67,8 @@
             document.getElementById("error_note").innerHTML = "請輸入姓名";
         } else if(document.getElementById("phone").value == "") {
             document.getElementById("error_note").innerHTML = "請輸入電話";
+        } else if(document.getElementById("address").value == "") {
+            document.getElementById("error_note").innerHTML = "請輸入地址";
         } else if(!document.getElementById("policy_check").checked && aryPara['type'] != 'update'){
             document.getElementById("error_note").innerHTML = "請同意個人資料蒐集告知函";
         } else {
