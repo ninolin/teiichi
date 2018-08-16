@@ -150,6 +150,7 @@
 			'userId'     	  => $row['id'],
 			'userName'   	  => $row['name'],
 			'userPhone'  	  => $row['phone'],
+			'userAddress'  	  => $row['address'],
 			'userStatus' 	  => $row['status'],
 			'userCreatedDate' => $row['user_created_date'],
 			'userSignCount'	  => $total,
