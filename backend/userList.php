@@ -15,7 +15,9 @@
 
 	<script src="js/lib/jquery-3.3.1.min.js"></script>
 	<script src="js/lib/jquery.bootpag.min.js"></script>
-	
+	<script type="text/javascript" src="daterange/moment.min.js"></script>
+	<script type="text/javascript" src="daterange/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="daterange/daterangepicker.css" />
 	<!-- Bootstrap CSS -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">-->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
@@ -146,11 +148,16 @@
 						<option value="2">拒絕</option>
 						<option value="3">待審</option>
 					</select>
-					
+					<label style="margin-right: 5px;">日期間的簽到數 : </label>
+					<input type="text" class="form-control" id="filterDate" name="datefilter" value="" />
+					<label style="margin-right: 5px;">排序 : </label>
+					<select id="columnSort" class="form-control" style="height:35px; margin-right: 5px;">
+						<option value="createdDate">註冊日</option>
+						<option value="signCount">簽到數</option>
+					</select>
 					<button class="btn btn-primary" id="filterQuery">Search</button>
 				  </div>
 				</nav>
-				
 				<div class="row" id="aliasList" style="padding:20px">
 					<table class="table table-hover">
 						<thead>

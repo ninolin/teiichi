@@ -118,8 +118,28 @@
     }
 	
 	$startIndex = ( $pageInfo['pageIndex'] -1) * $pageInfo['pageCount'];
-	
-	$sql = "SELECT *,(SELECT count(*) FROM line_user_sign WHERE line_id = line_user.line_id) as total FROM line_user ";
+	//SELECT *,
+	//	(SELECT count(*) FROM line_user_sign WHERE line_id = line_user.line_id AND STR_TO_DATE(sign_date, '%Y-%m-%d') > '2018-08-09') as total, 
+	//	cast((SELECT count(*) FROM line_user_sign WHERE line_id = line_user.line_id AND STR_TO_DATE(sign_date, '%Y-%m-%d') > '2018-08-09')/6 as decimal(4,2)) as rate 
+	//FROM line_user  
+	//ORDER BY `rate`  DESC
+	$dateSql = "";
+	if(!empty($_POST['date'])){
+		$fromDate = explode(" - ", $_POST['date'])[0];
+		$endDate = explode(" - ", $_POST['date'])[1];
+		$dateSql = "AND STR_TO_DATE(sign_date, '%Y-%m-%d') >= '".$fromDate."' AND STR_TO_DATE(sign_date, '%Y-%m-%d') <= '".$endDate."'";
+	}
+
+	$sortSql = " ORDER BY id DESC";
+	if(!empty($_POST['columnSort'])){
+		if($_POST['columnSort'] == "signCount"){
+			$sortSql = " ORDER BY total DESC ";
+		} else {
+			$sortSql = " ORDER BY id DESC";
+		}
+	}
+
+	$sql = "SELECT *,(SELECT count(*) FROM line_user_sign WHERE line_id = line_user.line_id ".$dateSql.") as total FROM line_user ".$sortSql;
 	
 	if(!empty($_POST['status'])){
 		$sql = $sql . "where status =" . $_POST['status'];

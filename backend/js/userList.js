@@ -1,7 +1,22 @@
 
 $( document ).ready(function() {
 	
+
+		$('input[name="datefilter"]').daterangepicker({
+			autoUpdateInput: false,
+			locale: {
+				cancelLabel: 'Clear'
+			}
+		});
+  
+		$('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+			$(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+		});
 	
+		$('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+			$(this).val('');
+		});
+
 		$(document).on("click","#filterQuery",function() {
 		
 			getUserList(1);
@@ -71,6 +86,8 @@ $( document ).ready(function() {
 			var postData = {
 				page  : page,
 				status : $('#filterStatus').val(),
+				date : $('#filterDate').val(),
+				columnSort : $('#columnSort').val()
 			};
 
 			$.post( "controllers/getUserList.php",postData,function( data ) {
@@ -117,7 +134,7 @@ $( document ).ready(function() {
 			});
 			
 		}
-	
+		
 		getUserList(1);
 
 });
