@@ -19,6 +19,7 @@ try {
         $f_page_name = $json_obj->entry[0]->changes[0]->value->from->name;
         $f_post_id = $json_obj->entry[0]->changes[0]->value->post_id;
         $f_verb = $json_obj->entry[0]->changes[0]->value->verb;
+        $f_published = $json_obj->entry[0]->changes[0]->value->published;
         $f_created_time = $json_obj->entry[0]->changes[0]->value->created_time;
         
         $f_parent_id = $json_obj->entry[0]->changes[0]->value->parent_id;
@@ -34,7 +35,7 @@ try {
             $sql = "INSERT INTO fb_page (page_id, page_name) VALUES ('".$f_page_id."', '".$f_page_name."')";
             sql_select_fetchALL($sql);
         }
-        if($f_comment_id == "" && $f_page_from_id == $f_page_id){
+        if($f_comment_id == "" && $f_page_from_id == $f_page_id && $f_published == 1){
             //新增/修改/刪除貼文
             if($f_verb == 'add' && $f_message != ''){
                 $post_url = "https://www.facebook.com/permalink.php?story_fbid=".explode('_',$f_post_id)[1]."&id=".$f_page_id;
@@ -49,7 +50,7 @@ try {
                 $sql = "UPDATE fb_post SET post_status = '2', lastest_update_time = UNIX_TIMESTAMP() WHERE post_id = '".$f_post_id."'";
                 $result = sql_select_fetchALL($sql);
             }
-        } else if($f_page_from_id == $f_page_id){
+        } else if($f_page_from_id == $f_page_id && $f_published == 1){
             //新增/修改/刪除留言
             if($f_verb == 'add'){
                 $sql = "SELECT '0' as 'parent_comment_id' FROM `fb_post` WHERE post_id = '".$f_parent_id."'
