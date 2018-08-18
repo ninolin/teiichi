@@ -11,7 +11,7 @@
         $sql = "INSERT INTO line_user 
                 (line_id, name, phone, address, user_created_date) 
             VALUES 
-                ('".$line_id."', '".$name."', '".$address."', '".$phone."', '".date("Y-m-d")."')";
+                ('".$line_id."', '".$name."', '".$phone."', '".$address."', '".date("Y-m-d")."')";
         sql_select_fetchALL($sql);
 
         $sql = "SELECT * FROM candidate WHERE type = 1";
